@@ -1,4 +1,4 @@
-@(develop: Boolean)
+@(develop: Boolean)(implicit r: RequestHeader)
 
 <!DOCTYPE html>
 
@@ -20,6 +20,7 @@
         if (navigator.userAgent.match(/(?:iPhone|iPod|Android)/)) {
             location.href = "./mobile";
         }
+        console.log("@routes.Yukisaki.socket.webSocketURL()");
     </script>
     }
 </head>

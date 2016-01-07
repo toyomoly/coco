@@ -1068,4 +1068,16 @@ $(function () {
 
     Coco.Config = Config;
     Coco.Manager = Manager;
+    
+    var receiveEvent = function(event) {
+        console.log(event.data || "empty");
+    }
+
+    window.ws = new WebSocket("ws://localhost:9000/ws/"); 
+    ws.onmessage = receiveEvent;
+    window.send = function (s) {
+        ws.send(JSON.stringify({text: s}));
+        //ws.send(s);
+    }
+    
 });
