@@ -1,0 +1,1149 @@
+li {
+    display: block;
+}
+
+a.button {
+    float: left;
+    margin: 2px;
+    padding: 2px 5px;
+    font-size: 16px;
+    color: #000;
+    text-shadow: none;
+    -webkit-border-radius: .5em;
+       -moz-border-radius: .5em;
+            border-radius: .5em;
+    background-color: #e3e3e3;
+    cursor: pointer;
+    font-weight: normal;
+    height: 24px;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+a.button:hover {
+    background-color: #ff6c43;
+    color: #fff;
+}
+
+a.button.select {
+}
+
+a.button.select:hover {
+    background-color: #4094ff;
+    color: #fff;
+}
+
+a.button:after {
+margin: 3px 5px 3px 0px;
+    width: 18px;
+    height: 18px;
+    float: left;
+    background-color: #666;
+    background-color: rgba(0,0,0,.4);
+    -webkit-border-radius: 9px;
+       -moz-border-radius: 9px;
+            border-radius: 9px;
+}
+
+a.button.on:after {
+    background-color: #4094ff;
+}
+
+a.button.ui-icon-back:after {
+    background-size: 11px;  /* 12px -> 90% */
+}
+
+a.button.ui-icon-carat-d:after {
+    background-size: 12px;  /* 12px -> 100% */
+}
+
+a.button.ui-icon-carat-u:after {
+    background-size: 12px;  /* 12px -> 100% */
+}
+
+a.button.ui-icon-check:after {
+    background-size: 12px;  /* 14px -> 80% */
+}
+
+a.button.ui-icon-radio.on:after {
+    background-image: none;
+    background-color: #fff;
+    width: 8px;
+    height: 8px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #4094ff;
+}
+
+a.button.mini {
+    padding: 0px;
+    -webkit-border-radius: 1em;
+       -moz-border-radius: 1em;
+            border-radius: 1em;
+    height: 26px;
+    width: 26px;
+}
+
+a.button.mini:after {
+    margin: 4px;
+}
+
+div.exInputBox {
+    position: relative;
+    height: 32px;
+    float: left;
+}
+
+div.exInputBox input {
+    width: 200px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 16px;
+    margin-top: 2px;
+    padding-left: 5px;
+    padding-right: 24px;
+    display: block;
+    -webkit-border-radius: .5em;
+       -moz-border-radius: .5em;
+            border-radius: .5em;
+    border: 1px solid #bbb;
+}
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        /* IE10-specific styles go here */
+        div.exInputBox input {
+            width: 220px;
+            padding-right: 4px;
+        }
+    }
+
+div.exInputBox div.placeholderText {
+    position: absolute;
+    left: 7px;
+    top: 5px;
+    margin: 0px auto;
+    height:24px;
+    line-height: 24px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #aaa;
+}
+
+div.exInputBox div.delval {
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    margin: 0px auto;
+    height:18px;
+    width:18px;
+    background: #666;
+    background: rgba(0,0,0,.4);
+    -webkit-border-radius: 9px;
+       -moz-border-radius: 9px;
+            border-radius: 9px;
+    cursor: pointer;
+}
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        /* IE10-specific styles go here */
+        div.exInputBox div.delval {
+            display: none;
+        }
+    }
+
+div.exInputBox div.delval.ui-icon-delete:after {
+    height:18px;
+    width:18px;
+    background-size: 10px;  /* 14px -> 70% */
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+#MainPanel {
+    overflow: hidden;
+    height: 100%;
+    min-height: 100%;
+}
+
+#MainPanel #TopMenu {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 32px;
+    width: 100%;
+    overflow: hidden;
+    background-color: #222;
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
+}
+
+#MainPanel #TopMenu #SearchMain {
+    height: 32px;
+    overflow: hidden;
+    float: left;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox {
+    height: 32px;
+    width: 307px;
+    overflow: hidden;
+    float: left;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox input#SearchKeyword {
+    margin-left: 4px;
+    width: 240px;
+}
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        /* IE10-specific styles go here */
+        #MainPanel #TopMenu #SearchMain #SearchInputBox input#SearchKeyword {
+            width: 260px;
+        }
+    }
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox {
+    position: fixed;
+    top: 32px;
+    left: 0;
+    background-color: #333;
+    height: 0px;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox.open {
+    height: auto;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox #SelectSectionList {
+    margin: 0 0 1px 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #e3e3e3;
+    border-style: solid;
+    border-color: #333;
+    border-width: 0 1px;
+    transition: .3s;
+    height: 0px;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox.open #SelectSectionList {
+    height: 256px;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon.lock #SelectSectionListBox.open #SelectSectionList {
+    height: 320px;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox #SelectSectionList li {
+    height: 32px;
+    width: 295px;
+    overflow: hidden;
+    line-height: 32px;
+    padding-left: 10px;
+    cursor: pointer;
+    background-color: #e3e3e3;
+    color: #000;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox #SelectSectionList li:hover {
+    background-color: #ff6c43;
+    color: #fff;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox #SelectSectionList li.openBtn,
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox #SelectSectionList li.closeBtn {
+    padding: 0px 10px;
+    width: 285px;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox #SelectSectionList li.openBtn.ui-icon-carat-d:after,
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon #SelectSectionListBox #SelectSectionList li.closeBtn.ui-icon-carat-u:after {
+    width:18px;
+    height:18px;
+    margin: 7px auto;
+    background-size: 12px;  /* 12px -> 100% */
+    background-color: #666;
+    background-color: rgba(0,0,0,.4);
+    -webkit-border-radius: 9px;
+       -moz-border-radius: 9px;
+            border-radius: 9px;
+}
+
+#MainPanel #TopMenu #SearchMain .menuIcon {
+    height: 32px;
+    width: 32px;
+    overflow: hidden;
+    float: left;
+    cursor: pointer;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon.menuIcon.ui-icon-carat-d:after,
+#MainPanel #TopMenu #SearchMain #SearchInputBox #DownIcon.menuIcon.ui-icon-carat-u:after {
+    width: 32px;
+    height: 32px;
+    background-size: 18px;  /* 12px -> 150% */
+}
+
+#MainPanel #TopMenu #SearchMain #SearchIcon.menuIcon.ui-icon-search:after,
+#MainPanel #TopMenu #SearchMain #SimpleIcon.menuIcon.ui-icon-bars:after,
+#MainPanel #TopMenu #SearchMain #HomeIcon.menuIcon.ui-icon-home:after {
+    width: 32px;
+    height: 32px;
+    background-size: 21px;  /* 14px -> 150% */
+}
+
+#MainPanel #TopMenu #SearchMain #SortIcon.menuIcon {
+    text-align: center;
+    line-height: 32px;
+    font-size: 14px;
+}
+
+#MainPanel #TopMenu #SearchMain #SearchInputBox:hover,
+#MainPanel #TopMenu #SearchMain .menuIcon:hover {
+    background-color: #444;
+}
+
+#MainPanel #TopMenu #ConfigMenu {
+    height: 32px;
+    width: 32px;
+    overflow: hidden;
+    float: right;
+}
+
+#MainPanel #TopMenu #ConfigMenu #ConfigIcon {
+    height: 32px;
+    width: 32px;
+    cursor: pointer;
+}
+
+#MainPanel #TopMenu #ConfigMenu #ConfigIcon:hover {
+    background-color: #444;
+}
+
+#MainPanel #TopMenu #ConfigMenu #ConfigIcon.ui-icon-gear:after {
+    width: 32px;
+    height: 32px;
+    background-size: 21px;  /* 14px -> 150% */
+}
+
+#MainPanel #TopMenu #ConfigMenu #SelectConfigListBox {
+    position: fixed;
+    top: 32px;
+    right: 0;
+    background-color: #333;
+    height: 0px;
+}
+
+#MainPanel #TopMenu #ConfigMenu #SelectConfigListBox.open {
+    height: auto;
+}
+
+#MainPanel #TopMenu #ConfigMenu #SelectConfigListBox #SelectConfigList {
+    margin: 0 0 1px 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #e3e3e3;
+    border-style: solid;
+    border-color: #333;
+    border-width: 0 1px;
+    transition: .3s;
+    height: 0px;
+}
+
+#MainPanel #TopMenu #ConfigMenu #SelectConfigListBox.open #SelectConfigList {
+    height: 128px;
+}
+
+#MainPanel #TopMenu #ConfigMenu #SelectConfigListBox #SelectConfigList li {
+    height: 32px;
+    width: 200px;
+    overflow: hidden;
+    line-height: 32px;
+    padding-left: 10px;
+    cursor: pointer;
+    background-color: #e3e3e3;
+    color: #000;
+}
+
+#MainPanel #TopMenu #ConfigMenu #SelectConfigListBox #SelectConfigList li:hover {
+    background-color: #ff6c43;
+    color: #fff;
+}
+
+#MainPanel #TopMenu #LastUpdate {
+    height: 32px;
+    width: 180px;
+    overflow: hidden;
+    float: right;
+    cursor: pointer;
+}
+
+#MainPanel #TopMenu #LastUpdate:hover {
+    background-color: #444;
+}
+
+#MainPanel #TopMenu #LastUpdate.waiting {
+    background-color: #222;
+}
+
+#MainPanel #TopMenu #LastUpdate #LastUpdateTitle,
+#MainPanel #TopMenu #LastUpdate #LastUpdateTime {
+    height: 16px;
+    width: 170px;
+    line-height: 16px;
+    overflow: hidden;
+    font-size: 12px;
+    padding-left: 10px;
+}
+
+#MainPanel #TopMenu #LastUpdate.waiting #LastUpdateTitle,
+#MainPanel #TopMenu #LastUpdate.waiting #LastUpdateTime {
+    display: none;
+}
+
+#MainPanel #TopMenu #LastUpdate #LastUpdateWaiting {
+    height: 24px;
+    width: 24px;
+    margin: 4px auto;
+    background-image: url(images/loadinfo.net.gif);
+    background-repeat: no-repeat;
+    background-size: 24px;
+    display: none;
+}
+
+#MainPanel #TopMenu #LastUpdate.waiting #LastUpdateWaiting {
+    display: block;
+}
+
+#MainPanel #ListPanel {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#MainPanel #ListPanel #ListPanelInnerBox {
+    margin-top: 32px;
+}
+
+#MainPanel #ListPanel li {
+    list-style: none;
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    overflow: hidden;
+    padding: 3px;
+    height: 72px;
+    transition: .3s;
+}
+    @media screen and (max-width:800px) {
+        #MainPanel #ListPanel li { width: 800px; } }
+
+#MainPanel #ListPanel li.theme1 {
+    border: 1px solid #999;
+    background: #fff;
+    background-image: -webkit-gradient(linear, left top, left bottom, from( #fff ), to( #fff ));
+    background-image: -webkit-linear-gradient( #fff , #fff );
+    background-image:    -moz-linear-gradient( #fff , #fff );
+    background-image:     -ms-linear-gradient( #fff , #fff );
+    background-image:      -o-linear-gradient( #fff , #fff );
+    background-image:         linear-gradient( #fff , #fff );
+}
+
+#MainPanel #ListPanel li.theme2 {
+    border: 1px solid #d7a022;
+    background: #fff9af;
+    background-image: -webkit-gradient(linear, left top, left bottom, from( #fffadf ), to( #fff3a5 ));
+    background-image: -webkit-linear-gradient( #fffadf , #fff3a5 );
+    background-image:    -moz-linear-gradient( #fffadf , #fff3a5 );
+    background-image:     -ms-linear-gradient( #fffadf , #fff3a5 );
+    background-image:      -o-linear-gradient( #fffadf , #fff3a5 );
+    background-image:         linear-gradient( #fffadf , #fff3a5 );
+}
+
+#MainPanel #ListPanel li.theme3 {
+    border: 1px solid #f76942;
+    background: #ffb9bf;
+    background-image: -webkit-gradient(linear, left top, left bottom, from( #ffbfbb ), to( #ff968f ));
+    background-image: -webkit-linear-gradient( #ffbfbb , #ff968f );
+    background-image:    -moz-linear-gradient( #ffbfbb , #ff968f );
+    background-image:     -ms-linear-gradient( #ffbfbb , #ff968f );
+    background-image:      -o-linear-gradient( #ffbfbb , #ff968f );
+    background-image:         linear-gradient( #ffbfbb , #ff968f );
+}
+
+#MainPanel #ListPanel li.theme4 {
+    border: 1px solid #666;
+    background: #bbb;
+    background-image: -webkit-gradient(linear, left top, left bottom, from( #ccc ), to( #bbb ));
+    background-image: -webkit-linear-gradient( #ccc , #bbb );
+    background-image:    -moz-linear-gradient( #ccc , #bbb );
+    background-image:     -ms-linear-gradient( #ccc , #bbb );
+    background-image:      -o-linear-gradient( #ccc , #bbb );
+    background-image:         linear-gradient( #ccc , #bbb );
+}
+
+#MainPanel #ListPanel li.edit {
+    height: 160px;
+}
+
+#MainPanel #ListPanel li .textdata {
+    padding-left: 10px;
+    margin-top: 3px;
+    line-height: 20px;
+    height: 20px;
+    font-size: 14px;
+}
+
+#MainPanel #ListPanel li .textdata.small {
+    font-size: 10px;
+}
+
+#MainPanel #ListPanel li .textdata.large {
+    font-size: 16px;
+}
+
+#MainPanel #ListPanel li .textdata.min-large {
+    font-size: 12px;
+}
+
+#MainPanel #ListPanel li .textdata .small {
+    font-size: 10px;
+    float: left;
+}
+
+#MainPanel #ListPanel li .textdata.memo {
+    padding: 3px 0px 3px 10px;
+    line-height: 1;
+    height: 14px;
+    font-size: 14px;
+}
+
+#MainPanel #ListPanel li .block-a {
+    float: left;
+    width: 50px;
+}
+
+#MainPanel #ListPanel li .block-a .block-a-1 {
+    width: 50px;
+    height: 72px;
+    overflow: hidden;
+}
+
+#MainPanel #ListPanel li .block-a .block-a-1 .no-image.ui-icon-user {
+    width: 50px;
+    height: 72px;
+    background-color: #999;
+    background-color: rgba(0,0,0,.2);
+}
+
+#MainPanel #ListPanel li .block-a .block-a-1 .no-image.ui-icon-user:after {
+    width: 50px;
+    height: 72px;
+    background-size: 56px;  /* 14px -> 400% */
+    background-position: center bottom;
+}
+
+#MainPanel #ListPanel li .block-a .block-a-1 img {
+    width: 60px;
+    margin-left: -5px;
+    margin-top: -2px;
+}
+
+#MainPanel #ListPanel li .block-b {
+    float: left;
+    width: 150px;
+}
+
+#MainPanel #ListPanel li .block-d {
+    float: left;
+    width: 210px;
+}
+
+#MainPanel #ListPanel li .block-e {
+    float: left;
+    width: 70px;
+}
+
+#MainPanel #ListPanel li .block-e .block-e-1 {
+    height: 32px;
+}
+
+#MainPanel #ListPanel li .block-o {
+    float: left;
+    width: 46px;
+    overflow: hidden;
+}
+
+#MainPanel #ListPanel li .block-o .block-o-1 {
+    height: 32px;
+}
+
+#MainPanel #ListPanel li .block-o .block-o-1 a.button {
+    width: 32px;
+    cursor: default;
+    background: #666;
+    background: rgba(0,0,0,.4);
+    color: #fff;
+}
+
+#MainPanel #ListPanel li .block-p {
+    transition: .3s;
+    margin-left: 528px;
+}
+
+#MainPanel #ListPanel li.openmenu .block-p {
+    margin-left: 620px; /* 528 + 46*2 */
+}
+
+#MainPanel #ListPanel li .block-p .block-p-z {
+    width: 26px;
+    height: 26px;
+    float: right;
+}
+
+#MainPanel #ListPanel li .block-p .block-p-z a.button.undo {
+    margin: 0px;
+}
+
+#MainPanel #ListPanel li .block-p .block-p-y {
+    height: 10px;
+    font-size: 10px;
+    line-height: 10px;
+    color: #999;
+    float: right;
+    margin-top: -10px;
+}
+
+#MainPanel #ListPanel li .block-s {
+    float: left;
+}
+
+#MainPanel #ListPanel li .block-s .block-s-1,
+#MainPanel #ListPanel li .block-s .block-s-2,
+#MainPanel #ListPanel li .block-s .block-s-3,
+#MainPanel #ListPanel li .block-s .block-s-4,
+#MainPanel #ListPanel li .block-s .block-s-5 {
+    width: 280px;
+    height: 32px;
+    overflow: hidden;
+}
+
+#MainPanel #ListPanel li .block-s input {
+    width: 212px;
+    margin-left: 2px;
+    -webkit-border-radius: .5em 0 0 .5em;
+       -moz-border-radius: .5em 0 0 .5em;
+            border-radius: .5em 0 0 .5em;
+}
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        /* IE10-specific styles go here */
+        #MainPanel #ListPanel li .block-s input {
+            width: 232px;
+        }
+    }
+
+#MainPanel #ListPanel li .block-s a.button {
+    width: 32px;
+}
+
+#MainPanel #ListPanel li .block-s a.button.select.ui-icon-radio {
+    width: 55px;
+}
+
+#MainPanel #ListPanel li .block-s a.button.select.ui-icon-carat-d {
+    width: 18px;
+    -webkit-border-radius: 0 .5em .5em 0;
+       -moz-border-radius: 0 .5em .5em 0;
+            border-radius: 0 .5em .5em 0;
+    margin-left: 1px;
+}
+
+#MainPanel #ListPanel li .block-s .block-s-5 a.button.update {
+    margin-left: 186px;
+}
+
+#MainPanel #ListPanel .more {
+    padding: 7px 0px;
+    cursor: pointer;
+    background-color: #e3e3e3;
+}
+
+#MainPanel #ListPanel .more:hover {
+    background-color: #ff6c43;
+    color: #fff;
+}
+
+#MainPanel #ListPanel .more.ui-icon-carat-d:after {
+    width:18px;
+    height:18px;
+    margin: 0px auto;
+    background-size: 12px;  /* 12px -> 100% */
+    background-color: #666;
+    background-color: rgba(0,0,0,.4);
+    -webkit-border-radius: 9px;
+       -moz-border-radius: 9px;
+            border-radius: 9px;
+}
+
+#MainPanel #ListPanel #TheSekiMapBox {
+    position: fixed;
+    top: 100%;
+    width: 100%;
+    height: 100%;
+    transition: .3s;
+    box-sizing: border-box;
+    padding-top: 112px;
+    background-color: rgba(0,0,0,0);
+}
+
+#MainPanel #ListPanel #TheSekiMapBox.show {
+    top: 0;
+}
+
+#MainPanel #ListPanel #TheSekiMapBox.show .closeMap {
+    height: 20px;
+    width: 100%;
+    background-color: #e3e3e3;
+    padding: 7px 0;
+    border-top: solid 1px #666;
+}
+
+#MainPanel #ListPanel #TheSekiMapBox.show .closeMap.ui-icon-carat-d:after {
+    width:18px;
+    height:18px;
+    margin: 0px auto;
+    background-size: 12px;  /* 12px -> 100% */
+    background-color: #666;
+/*    background-color: rgba(0,0,0,.4); */
+    -webkit-border-radius: 9px;
+       -moz-border-radius: 9px;
+            border-radius: 9px;
+}
+
+#MainPanel #ListPanel #TheSekiMapBox #TheSekiMap {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: #ccc;
+}
+
+#MainPanel #UpdateStatusBox {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    background: rgba(0,0,0,0);
+    overflow: hidden;
+}
+
+#MainPanel #UpdateStatusBox.openmenu {
+    width: 138px;
+    height: 64px;
+}
+
+#MainPanel #UpdateStatusBox a.button {
+    position: absolute;
+    margin-left: 2px;
+    margin-top: 2px;
+    width: 32px;
+    transition: margin .3s;
+}
+
+#MainPanel #UpdateStatusBox a.button.copy,
+#MainPanel #UpdateStatusBox a.button.paste {
+    font-size: 12px;
+    height: 20px;
+    padding: 4px 5px;
+}
+
+#MainPanel #UpdateStatusBox .anti-hover {
+    position: absolute;
+    width: 48px;
+    height: 34px;
+    background: rgba(0,0,0,0);
+}
+
+#MainPanel #UpdateStatusBox.openmenu #UpdateStatusBox-BtnUpdate1.button {
+    margin-left: 48px;
+    margin-top: 2px;
+}
+
+#MainPanel #UpdateStatusBox.openmenu #UpdateStatusBox-BtnUpdate4.button {
+    margin-left: 94px;
+    margin-top: 2px;
+}
+
+#MainPanel #UpdateStatusBox.openmenu #UpdateStatusBox-BtnEdit.button {
+    margin-left: 2px;
+    margin-top: 34px;
+}
+
+#MainPanel #UpdateStatusBox.openmenu #UpdateStatusBox-BtnCopy.button {
+    margin-left: 48px;
+    margin-top: 34px;
+}
+
+#MainPanel #UpdateStatusBox.openmenu #UpdateStatusBox-BtnPaste.button {
+    margin-left: 94px;
+    margin-top: 34px;
+}
+
+/*
+    simple
+*/
+#MainPanel.simple #ListPanel li {
+    height: 32px;
+}
+
+#MainPanel.simple #ListPanel li.edit {
+    height: 160px;
+}
+
+#MainPanel.simple #ListPanel li .textdata {
+    padding-left: 10px;
+    margin-top: 3px;
+    line-height: 26px;
+    height: 26px;
+    font-size: 14px;
+}
+
+#MainPanel.simple #ListPanel li .textdata.large {
+    font-size: 16px;
+}
+
+#MainPanel.simple #ListPanel li .textdata.min-large {
+    font-size: 12px;
+}
+
+#MainPanel.simple #ListPanel li .textdata.small {
+    font-size: 10px;
+}
+
+#MainPanel.simple #ListPanel li .textdata.memo {
+    padding: 0 0 0 10px;
+    float: left;
+}
+
+#MainPanel.simple #ListPanel li .block-a,
+#MainPanel.simple #ListPanel li .block-b-3,
+#MainPanel.simple #ListPanel li .block-d-2,
+#MainPanel.simple #ListPanel li .block-d-3,
+#MainPanel.simple #ListPanel li .block-p .block-p-y {
+    display: none;
+}
+
+#MainPanel.simple #ListPanel li .block-b {
+    width: 200px;
+}
+
+#MainPanel.simple #ListPanel li .block-b-1 {
+    float: left;
+    width: 50px;
+    padding: 0;
+}
+
+#MainPanel.simple #ListPanel li .block-b-2 {
+    float: left;
+    width: 140px;
+}
+
+#MainPanel.simple #ListPanel li .block-p .block-p-z {
+    margin-top: 3px;
+}
+
+#MainPanel.simple #ListPanel li.openmenu .block-p {
+    margin-left: 758px; /* 528 + 46*5 */
+}
+
+#MainPanel.simple #UpdateStatusBox.openmenu {
+    width: 276px;
+    height: 32px;
+}
+
+#MainPanel.simple #UpdateStatusBox.openmenu #UpdateStatusBox-BtnUpdate1.button {
+    margin-left: 48px;
+    margin-top: 2px;
+}
+
+#MainPanel.simple #UpdateStatusBox.openmenu #UpdateStatusBox-BtnUpdate4.button {
+    margin-left: 94px;
+    margin-top: 2px;
+}
+
+#MainPanel.simple #UpdateStatusBox.openmenu #UpdateStatusBox-BtnEdit.button {
+    margin-left: 140px;
+    margin-top: 2px;
+}
+
+#MainPanel.simple #UpdateStatusBox.openmenu #UpdateStatusBox-BtnCopy.button {
+    margin-left: 186px;
+    margin-top: 2px;
+}
+
+#MainPanel.simple #UpdateStatusBox.openmenu #UpdateStatusBox-BtnPaste.button {
+    margin-left: 232px;
+    margin-top: 2px;
+}
+
+#MainPanel #ConfigMyList,
+#MainPanel #ConfigMySection,
+#MainPanel #ConfigEtc,
+#MainPanel #ConfigJiji,
+#MainPanel #ConfigNote {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#MainPanel #ConfigMyList .back,
+#MainPanel #ConfigMySection .back,
+#MainPanel #ConfigEtc .back,
+#MainPanel #ConfigJiji .back,
+#MainPanel #ConfigNote .back {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #555;
+    z-index: -100;
+}
+
+#MainPanel #ConfigMyList .summary,
+#MainPanel #ConfigMySection .summary,
+#MainPanel #ConfigEtc .summary,
+#MainPanel #ConfigJiji .summary,
+#MainPanel #ConfigNote .summary {
+    width: 350px;
+    height: 80px;
+    margin: 0 auto;
+    padding-top: 50px;
+    color: #fff;
+}
+
+#MainPanel #ConfigMyList .inputBox,
+#MainPanel #ConfigMySection .buttonBox,
+#MainPanel #ConfigEtc .inputBox,
+#MainPanel #ConfigJiji .inputBox,
+#MainPanel #ConfigNote .inputBox {
+    width: 350px;
+    margin: 0 auto;
+    padding-bottom: 10px;
+}
+
+#MainPanel #ConfigMyList .inputBox a.button,
+#MainPanel #ConfigMySection .buttonBox a.button,
+#MainPanel #ConfigEtc .inputBox a.button,
+#MainPanel #ConfigJiji .inputBox a.button,
+#MainPanel #ConfigNote .inputBox a.button {
+    float: none;
+    display: block;
+}
+
+#MainPanel #ConfigMyList .inputBox input.inputId {
+    width: 100px;
+}
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        /* IE10-specific styles go here */
+        #MainPanel #ConfigMyList .inputBox input.inputId {
+            width: 120px;
+        }
+    }
+
+#MainPanel #ConfigMyList .inputBox .dispName {
+    margin-left: 145px;
+    height: 32px;
+    line-height: 32px;
+    color: #fff;
+}
+
+#MainPanel #ConfigMyList .inputBox a.button.save,
+#MainPanel #ConfigMySection .buttonBox a.button.save,
+#MainPanel #ConfigEtc .inputBox a.button.save {
+    margin-bottom: 30px;
+}
+
+#MainPanel #ConfigEtc .inputBox .title {
+    clear: left;
+    color: #fff;
+}
+
+#MainPanel #ConfigEtc .inputBox a.button.config {
+    float: left;
+    width: 115px;
+    margin-left: 30px;
+    margin-bottom: 30px;
+}
+
+#MainPanel #ConfigEtc .inputBox textarea {
+    height: 200px;
+    width: 300px;
+    font-size: 12px;
+    -webkit-border-radius: .5em;
+       -moz-border-radius: .5em;
+            border-radius: .5em;
+    border: 1px solid #bbb;
+    display: none;
+}
+
+#MainPanel #ConfigJiji .inputBox .title {
+    clear: left;
+    color: #fff;
+    margin-top: 30px;
+}
+
+#MainPanel #ConfigJiji .inputBox .big {
+    font-size: 20px;
+}
+
+#MainPanel #ConfigJiji .inputBox .small {
+    font-size: 12px;
+    color: #ccc;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl {
+ /* border: solid 2px #333; */
+    margin-top: 30px;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine,
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .editLine {
+    overflow: hidden;
+ /* background-color: #333; */
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine .exInputBox {
+    margin-left: 2px;
+    margin-right: 4px;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine input.inputId {
+    width: 100px;
+}
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        /* IE10-specific styles go here */
+        #MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine input.inputId {
+            width: 120px;
+        }
+    }
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine .edit-id,
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine .dispName {
+    margin-left: 5px;
+    height: 32px;
+    width: 130px;
+    overflow: hidden;
+    line-height: 32px;
+    color: #fff;
+    float: left;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine .dispName {
+    width: 130px;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine a.button {
+    float: right;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl.open .idLine .exInputBox,
+#MainPanel #ConfigJiji .inputBox .jijiCtrl.open .idLine a.button.sign-in,
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine .edit-id,
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine a.button.sign-out {
+    display: none;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine .exInputBox,
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .idLine a.button.sign-in,
+#MainPanel #ConfigJiji .inputBox .jijiCtrl.open .idLine .edit-id,
+#MainPanel #ConfigJiji .inputBox .jijiCtrl.open .idLine a.button.sign-out {
+    display: block;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .editLine {
+    transition: .3s;
+    height: 0px;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl.open .editLine {
+    height: 450px;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .editLine .editLine-inner {
+    height: 32px;
+    overflow: hidden;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .editLine .editLine-inner .exInputBox {
+    margin-left: 2px;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .editLine .editLine-inner a.button.ping {
+    margin-left: 10px;
+    float: left;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .editLine a.button.jijiSave {
+    margin-top: 30px;
+}
+
+#MainPanel #ConfigJiji .inputBox .jijiCtrl .editLine .jijilog {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #ccc;
+    line-height: 14px;
+}
+
+#MainPanel #ConfigNote .inputBox iframe {
+    width: 100%;
+    height: 500px;
+    background-color: #fff;
+}
+
+
+.PopupPanel {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background-image: url(images/33380b.png);
+    background-repeat: repeat;
+}
+
+.PopupPanel .popupContain {
+    width: 300px;
+    height: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.PopupPanel .popupContain .buttonBox {
+    margin: 0;
+    width: 300px;
+    height: 80%;
+    overflow-y: auto;
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 10px;
+}
+
+.PopupPanel .popupContain .buttonBox a.button.popupSelect {
+    float: none;
+    display: block;
+}
+

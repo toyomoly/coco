@@ -1,0 +1,27 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Ajax Rest App
+GET    /json/getSectionList    controllers.Yukisaki.getSectionList(callback = "")
+GET    /json/getYukisakiList   controllers.Yukisaki.getYukisakiList(callback = "")
+GET    /json/updateYukisaki    controllers.Yukisaki.updateYukisaki(UserID:String, StatusCD:String, Jotai:String, Yukisaki:String, Nichiji:String, callback = "")
+
+POST   /post/getSectionList    controllers.Yukisaki.getSectionListByPost()
+POST   /post/getYukisakiList   controllers.Yukisaki.getYukisakiListByPost()
+POST   /post/updateYukisaki    controllers.Yukisaki.updateYukisakiByPost()
+
+# WebSocket
+GET    /ws/                    controllers.Yukisaki.socket
+
+# Home age
+GET    /                       controllers.Application.index(develop:Boolean = false, mobile:Boolean = false)
+GET    /mobile                 controllers.Application.index(develop:Boolean = false, mobile:Boolean = true)
+GET    /map                    controllers.Application.map(id:String ?= "", mini:Boolean = false)
+GET    /mapmini                controllers.Application.map(id:String ?= "", mini:Boolean = true)
+
+# Map static resources from the /public folder to the /assets URL path
+GET    /assets/*file           controllers.Assets.at(path="/public", file)
+
+# NotFound
+GET    /*hoge                  controllers.Application.notFound(hoge:String)

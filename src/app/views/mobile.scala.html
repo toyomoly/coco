@@ -1,0 +1,131 @@
+@(develop: Boolean)(implicit r: RequestHeader)
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=640, user-scalable=no" />
+    <title>ここにいる[β版]</title>
+    <link rel="stylesheet" href="./assets/include/jquery.mobile.inline-svg-1.4.0.css" />
+    <link rel="stylesheet" href="./assets/include/coco.common.css" />
+    <link rel="stylesheet" href="./assets/include/coco.mobile.css" />
+    @if(!develop) {
+    <script>
+        if (!navigator.userAgent.match(/(?:iPhone|iPad|iPod|Android)/)) {
+            location.href = "./";
+        }
+    </script>
+    }
+</head>
+<body>
+    <div id="BasePanel">
+        <div id="MainPanel">
+            <div id="TopMenu">
+                <div id="TopMenuMain">
+                    <div id="TopTitle">ここにいる</div>
+                    <div id="SearchIcon" class="ui-icon-search"></div>
+                </div>
+                <div id="TopMenuSub">
+                    <select id="SelectGroupList"></select>
+                    <select id="SelectInitialList"></select>
+                    <div id="SearchKeyword"></div>
+                    <select id="SelectSortList"></select>
+                    <div id="ListCount"></div>
+                </div>
+                <div id="TopMenuSearch">
+                    <div id="SearchSelectTitle" class="search-title"></div>
+                    <div id="SearchSelectBox" class="search-box">
+                        <div id="SearchSelectItem-Group" class="search-select-item ui-icon-carat-r button-icon"></div>
+                        <div id="SearchSelectItem-Initial" class="search-select-item ui-icon-carat-r button-icon"></div>
+                    </div>
+                    <div id="SearchKeywordTitle" class="search-title"></div>
+                    <div id="SearchKeywordBox" class="search-box">
+                        <input id="SearchKeywordTextBox" />
+                        <div id="SearchKeywordSerchButton" class="ui-icon-carat-r button-icon"></div>
+                    </div>
+                </div>
+            </div>
+            <ul id="ListPanel">
+                <div class="more hidden ui-icon-carat-d button-icon"></div>
+            </ul>
+        </div>
+        <div id="SidePanel">
+            <div id="DetailPanel">
+                <div id="DetailTopMenu" class="ui-icon-carat-l"></div>
+                <ul id="DetailListPanel">
+                    <li id="DetailBaseLi" class="theme1">
+                        <div class="block-a">
+                            <div class="block-a-1"></div>
+                        </div>
+                        <div class="block-b">
+                            <div class="block-line">
+                                <div class="texttitle data-id"></div>
+                                <div class="textdata data-id"></div>
+                            </div>
+                            <div class="block-line">
+                                <div class="texttitle data-name"></div>
+                                <div class="textdata data-name large"></div>
+                            </div>
+                            <div class="block-line">
+                                <div class="texttitle data-kana"></div>
+                                <div class="textdata data-kana"></div>
+                            </div>
+                            <div class="block-line data-section">
+                                <div class="texttitle data-section"></div>
+                                <div class="textdata data-section"></div>
+                            </div>
+                            <!-- div class="block-line">
+                                <div class="texttitle data-sectionCd"></div>
+                                <div class="textdata data-sectionCd"></div>
+                            </div -->
+                            <div class="block-line">
+                                <div class="texttitle data-rank"></div>
+                                <div class="textdata data-rank"></div>
+                            </div>
+                            <div class="block-line">
+                                <div class="texttitle data-phone"></div>
+                                <div class="textdata data-phone"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="DetailEditLi">
+                        <div class="block-c">
+                            <div class="block-view">
+                                <a class="button status"></a>
+                                <div class="data-comment"></div>
+                            </div>
+                        </div>
+                        <div class="block-d">
+                            <div class="data-lastUpdate"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="BottomPanel">
+            <div id="EditPanel">
+                <select id="EditSelectStatus"></select>
+                <input id="EditTextComment" />
+                <div id="EditSubmitButton" class="button-edit ui-icon-edit button-icon"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/include/jquery-2.0.3.min.js"></script>
+    <script src="./assets/include/jquery.cookie.js"></script>
+    <script src="./assets/include/jquery.tap.min.js"></script>
+    <script src="./assets/data/list.js"></script>
+    <script src="./assets/data/TheSekiList.js"></script>
+    <script src="./assets/include/coco.common.js"></script>
+    <script src="./assets/include/coco.text.js"></script>
+    <script src="./assets/include/coco.mobile.js"></script>
+    <script>
+        $(function () {
+            Coco.Manager.init(function () {
+                Coco.Manager.setAutoReload("@routes.Yukisaki.socket.webSocketURL()");
+            });
+        });
+    </script>
+</body>
+</html>

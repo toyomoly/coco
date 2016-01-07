@@ -1,0 +1,672 @@
+li {
+    display: block;
+}
+
+.button-icon:after {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 50%;
+    margin-top: -16px;
+    background-color: #666;
+    background-color: rgba(0,0,0,.4);
+    border-radius: 1em;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#BasePanel {
+    width: 640px;
+    margin: 0 auto;
+    overflow: hidden;
+    height: 100%;
+    min-height: 100%;
+}
+
+#MainPanel {
+    width: 640px;
+    float: left;
+    transition: .3s;
+    margin-left: 0px;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#MainPanel #TopMenu {
+    height: 160px;
+    width: 100%;
+    overflow: hidden;
+    background-color: #222;
+    transition: .3s;
+}
+
+#MainPanel #TopMenu #TopMenuMain {
+    height: 80px;
+    width: 100%;
+    overflow: hidden;
+}
+
+#MainPanel #TopMenu #TopMenuMain #TopTitle {
+    height: 80px;
+    width: 300px;
+    overflow: hidden;
+    float: left;
+    font-size: 42px;
+    line-height: 80px;
+    color: #fff;
+    font-weight: bold;
+    padding-left: 20px;
+}
+
+#MainPanel #TopMenu #TopMenuMain #SearchIcon {
+    height: 80px;
+    width: 80px;
+    overflow: hidden;
+    float: right;
+}
+
+#MainPanel #TopMenu #TopMenuMain #SearchIcon.ui-icon-search:after {
+    width: 80px;
+    height: 80px;
+    background-size: 42px;  /* 14px -> 300% */
+}
+
+/*
+    検索メニュー
+*/
+#MainPanel #TopMenu #TopMenuSearch {
+    display: none; /* デフォルト表示 */
+    background-color: #fff;
+    color: #000;
+}
+
+#MainPanel #TopMenu #TopMenuSearch .search-title {
+    height: 40px;
+    width: 620px;
+    background-color: #ccc;
+    overflow: hidden;
+    font-size: 24px;
+    line-height: 40px;
+    color: #000;
+    padding-left: 20px;
+}
+
+#MainPanel #TopMenu #TopMenuSearch .search-box {
+    height: 80px;
+    padding: 0 6px;
+    width: 628px;
+    overflow: hidden;
+}
+
+#MainPanel #TopMenu #TopMenuSearch #SearchSelectBox.search-box .search-select-item {
+    height: 80px;
+    width: 240px;
+    overflow: hidden;
+    font-size: 32px;
+    line-height: 80px;
+    float: left;
+    position: relative;
+    padding-left: 26px;
+    padding-right: 48px;
+}
+
+#MainPanel #TopMenu #TopMenuSearch #SearchSelectBox.search-box .search-select-item.ui-icon-carat-r:after,
+#MainPanel #TopMenu #TopMenuSearch #SearchKeywordBox.search-box .ui-icon-carat-r:after {
+    right: 16px;
+    background-size: 12px;  /* 8px -> 150% */
+}
+
+#MainPanel #TopMenu #TopMenuSearch #SearchKeywordBox.search-box #SearchKeywordTextBox {
+    width: 400px;
+    height: 50px;
+    display: block;
+    float: left;
+    margin-top: 14px;
+    margin-left: 26px;
+    font-size: 32px;
+    padding: 0 8px;
+    border: 1px solid #999;
+}
+
+#MainPanel #TopMenu #TopMenuSearch #SearchKeywordBox.search-box #SearchKeywordSerchButton.ui-icon-carat-r {
+    height: 80px;
+    width: 102px;
+    overflow: hidden;
+    float: right;
+    position: relative;
+    padding-right: 48px;
+}
+
+/*
+    サブメニュー
+*/
+#MainPanel #TopMenu #TopMenuSub {
+    height: 80px;
+    width: 100%;
+    overflow: hidden;
+}
+
+#MainPanel #TopMenu #TopMenuSub select {
+    height: 80px;
+    font-size: 30px;
+    color: #f0f0f0;
+    background-color: transparent;
+    display: block;
+    float: left;
+    border: none;
+    -webkit-appearance: none;
+    background-image: url('images/icons-png/carat-d-white.png');
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-size: 18px;  /* 12px -> 150% */
+    padding: 0 30px 0 10px;
+}
+
+#MainPanel #TopMenu #TopMenuSub #SelectGroupList,
+#MainPanel #TopMenu #TopMenuSub #SelectInitialList {
+    width: 380px;
+}
+
+#MainPanel #TopMenu #TopMenuSub #SelectSortList {
+    width: 150px;
+}
+
+#MainPanel #TopMenu #TopMenuSub #SearchKeyword {
+    height: 80px;
+    width: 380px;
+    margin-left: 10px;
+    font-size: 30px;
+    line-height: 80px;
+    color: #fff;
+    overflow: hidden;
+    display: block;
+    float: left;
+}
+
+#MainPanel #TopMenu #TopMenuSub #ListCount {
+    height: 80px;
+    width: 100px;
+    padding-right: 10px;
+    font-size: 20px;
+    line-height: 80px;
+    text-align: right;
+    color: #fff;
+    overflow: hidden;
+    float: right;
+}
+
+/*
+    クラス設定時の変化
+*/
+#MainPanel #TopMenu.search {
+    height: 320px;
+}
+
+#MainPanel #TopMenu.search #TopMenuSearch {
+    display: block;
+}
+
+#MainPanel #TopMenu.search #TopMenuSub {
+    display: none;
+}
+
+#MainPanel #TopMenu #TopMenuSub.search-initial #SelectGroupList,
+#MainPanel #TopMenu #TopMenuSub.search-keyword #SelectGroupList {
+    display: none;
+}
+
+#MainPanel #TopMenu #TopMenuSub.search-group #SelectInitialList,
+#MainPanel #TopMenu #TopMenuSub.search-keyword #SelectInitialList {
+    display: none;
+}
+
+#MainPanel #TopMenu #TopMenuSub.search-group #SearchKeyword,
+#MainPanel #TopMenu #TopMenuSub.search-initial #SearchKeyword {
+    display: none;
+}
+
+#MainPanel #TopMenu #TopMenuSub.search-initial #SelectSortList {
+    display: none;
+}
+
+/*
+    リスト
+*/
+#MainPanel #ListPanel {
+    margin: 0;
+    padding: 0;
+}
+
+#MainPanel #ListPanel li {
+    list-style: none;
+    color: #000;
+    display: block;
+    overflow: hidden;
+    padding: 5px;
+    height: 100px;
+    /* transition: .3s; */
+}
+
+#MainPanel #ListPanel li.theme1 {
+    border: 1px solid #999;
+    background: #fff;
+}
+
+#MainPanel #ListPanel li.theme2 {
+    border: 1px solid #d7a022;
+    background: #fff9af;
+}
+
+#MainPanel #ListPanel li.theme3 {
+    border: 1px solid #f76942;
+    background: #ffb9bf;
+}
+
+#MainPanel #ListPanel li.theme4 {
+    border: 1px solid #666;
+    background: #bbb;
+}
+
+#MainPanel #ListPanel li .textdata {
+    height: 20px;
+    font-size: 20px;
+    margin: 5px 0px 5px 10px;
+    line-height: 1;
+    overflow: hidden;
+}
+
+#MainPanel #ListPanel li .textdata.large {
+    height: 30px;
+    font-size: 30px;
+    margin: 5px 0px 5px 10px;
+}
+
+#MainPanel #ListPanel li .block-a {
+    float: left;
+    width: 80px;
+}
+
+#MainPanel #ListPanel li .block-a .block-a-1 {
+    width: 80px;
+    height: 100px;
+    overflow: hidden;
+}
+
+#MainPanel #ListPanel li .block-a .block-a-1 img {
+    width: 90px;
+    margin-left: -5px;
+    margin-top: -4px;
+}
+
+#MainPanel #ListPanel li .block-a .block-a-1 .no-image.ui-icon-user {
+    width: 80px;
+    height: 100px;
+    background-color: #999;
+    background-color: rgba(0,0,0,.2);
+}
+
+#MainPanel #ListPanel li .block-a .block-a-1 .no-image.ui-icon-user:after {
+    width: 80px;
+    height: 100px;
+    background-size: 84px;  /* 14px -> 600% */
+    background-position: center bottom;
+}
+
+#MainPanel #ListPanel li .block-b {
+    float: left;
+    width: 500px;
+}
+
+#MainPanel #ListPanel li .block-b .block-b-1 {
+    height: 30px;
+    overflow: hidden;
+}
+
+#MainPanel #ListPanel li .block-b .block-b-1 .textdata-id {
+    float: left;
+    width: 200px;
+}
+
+#MainPanel #ListPanel li .block-b .block-b-1 .textdata-group {
+    float: left;
+    width: 280px;
+}
+
+#MainPanel #ListPanel li .block-b .block-b-3 {
+    height: 30px;
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+#MainPanel #ListPanel li .block-b .block-b-3 .block-view a.button.status {
+    float: left;
+    width: 42px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: #666;
+    background: rgba(0,0,0,.4);
+    padding-left: 5px;
+    overflow: hidden;
+    margin-top: 1px;
+}
+
+#MainPanel #ListPanel li .block-b .block-b-3 .block-view .textdata-comment {
+    float: left;
+    width: 420px;
+}
+
+#MainPanel #ListPanel li .block-b .block-b-1,
+#MainPanel #ListPanel li .block-b .block-b-2,
+#MainPanel #ListPanel li .block-b .block-b-3 {
+    clear: left;
+}
+
+#MainPanel #ListPanel li .block-c {
+    margin-left: 580px;
+    height: 100px;
+    position: relative;
+}
+
+#MainPanel #ListPanel li .block-c.ui-icon-carat-r:after {
+    background-size: 12px;  /* 8px -> 150% */
+}
+
+#MainPanel #ListPanel .more.ui-icon-carat-d {
+    height: 50px;
+    width: 640px;
+    overflow: hidden;
+    position: relative;
+    background-color: #ccc;
+}
+
+#MainPanel #ListPanel .more.ui-icon-carat-d:after {
+    left: 50%;
+    margin-left: -16px;
+    background-size: 18px;  /* 12px -> 150% */
+}
+
+/*
+    Detail
+*/
+#SidePanel {
+    width: 0px;
+    margin-left: 640px;
+    transition: .3s;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#DetailPanel {
+    width: 640px;
+    overflow: hidden;
+}
+
+#DetailPanel #DetailTopMenu {
+    height: 80px;
+    width: 100%;
+    overflow: hidden;
+    background-color: #222;
+}
+
+#DetailPanel #DetailTopMenu.ui-icon-carat-l:after {
+    width: 80px;
+    height: 80px;
+    background-size: 24px;  /* 8px -> 300% */
+}
+
+#DetailPanel #DetailListPanel {
+    margin: 0;
+    padding: 0;
+}
+
+#DetailPanel #DetailListPanel li {
+    list-style: none;
+    color: #000;
+    display: block;
+    overflow: hidden;
+    padding: 5px;
+}
+
+#DetailPanel #DetailListPanel li.theme1 {
+    border: 1px solid #999;
+    background: #fff;
+}
+
+#DetailPanel #DetailListPanel li.theme2 {
+    border: 1px solid #d7a022;
+    background: #fff9af;
+}
+
+#DetailPanel #DetailListPanel li.theme3 {
+    border: 1px solid #f76942;
+    background: #ffb9bf;
+}
+
+#DetailPanel #DetailListPanel li.theme4 {
+    border: 1px solid #666;
+    background: #bbb;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-a {
+    float: left;
+    width: 120px;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-a .block-a-1 {
+    width: 120px;
+    height: 150px;
+    overflow: hidden;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-a .block-a-1 img {
+    width: 134px;
+    margin-left: -7px;
+    margin-top: -6px;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-a .block-a-1 .no-image.ui-icon-user {
+    width: 120px;
+    height: 150px;
+    background-color: #999;
+    background-color: rgba(0,0,0,.2);
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-a .block-a-1 .no-image.ui-icon-user:after {
+    width: 120px;
+    height: 150px;
+    background-size: 126px;  /* 14px -> 900% */
+    background-position: center bottom;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-b {
+    float: left;
+    width: 508px;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-b .block-line {
+    padding: 5px 0px 5px 10px;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-b .block-line .texttitle {
+    width: 498px;
+    height: 25px;
+    font-size: 25px;
+    line-height: 25px;
+    overflow: hidden;
+    color: #3af;
+    padding-bottom: 5px;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-b .block-line .textdata {
+    width: 488px;
+    height: 30px;
+    font-size: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-b .block-line .textdata.large {
+    height: 40px;
+    font-size: 40px;
+    line-height: 40px;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-b .block-line .textdata .small {
+    height: 30px;
+    font-size: 20px;
+    line-height: 30px;
+    float: left;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-b .block-line.ui-icon-action {
+    position: relative;
+}
+
+#DetailPanel #DetailListPanel li#DetailBaseLi .block-b .block-line.ui-icon-action:after {
+    right: 16px;
+    top: inherit;
+    margin-top: 0px;
+    bottom: 4px;
+    background-size: 18px;  /* 14px -> 130% */
+}
+
+#DetailPanel #DetailListPanel li#DetailEditLi {
+    margin-top: 10px;
+}
+
+#DetailPanel #DetailListPanel li#DetailEditLi .block-c {
+    height: 120px;
+    padding: 5px;
+}
+
+#DetailPanel #DetailListPanel li#DetailEditLi .block-c .block-view {
+    height: 120px;
+}
+
+#DetailPanel #DetailListPanel li#DetailEditLi .block-c .block-view a.button.status {
+    float: left;
+    width: 60px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    background: #666;
+    background: rgba(0,0,0,.4);
+    padding: 8px 0 8px 8px;
+    overflow: hidden;
+}
+
+#DetailPanel #DetailListPanel li#DetailEditLi .block-c .block-view .data-comment {
+    width: 540px;
+    height: 90px;
+    font-size: 30px;
+    line-height: 30px;
+    margin-left: 10px;
+    margin-top: 5px;
+    overflow: hidden;
+    float: left;
+}
+
+#DetailPanel #DetailListPanel li#DetailEditLi .block-d {
+}
+
+#DetailPanel #DetailListPanel li#DetailEditLi .block-d .data-lastUpdate {
+    height: 15px;
+    font-size: 15px;
+    line-height: 15px;
+    overflow: hidden;
+    color: #666;
+    float: right;
+    text-align: right;
+    padding: 5px;
+}
+
+/*
+    Detailの変化
+*/
+#BasePanel.detail #MainPanel {
+    margin-left: -640px;
+}
+
+#BasePanel.detail #SidePanel {
+    width: 640px;
+    margin-left: 0px;
+}
+
+/*
+    Edit
+*/
+#BottomPanel {
+    position: fixed;
+    bottom: -150px;
+    overflow: hidden;
+    width: 638px;
+    height:80px;
+    border: 1px solid #999;
+    background-color: #fff;
+    overflow: hidden;
+    transition: .3s;
+}
+
+#BottomPanel #EditPanel {
+    height: 60px;
+    padding: 5px;
+    overflow: hidden;
+}
+
+#BottomPanel #EditPanel select#EditSelectStatus {
+    height: 60px;
+    width: 100px;
+    font-size: 25px;
+    display: block;
+    float: left;
+    border: 1px solid #999;
+    -webkit-appearance: none;
+    background-image: url('images/icons-png/carat-d-black.png');
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-size: 12px;  /* 12px -> 100% */
+    padding: 0 30px 0 10px;
+}
+
+#BottomPanel #EditPanel input#EditTextComment {
+    height: 58px;
+    font-size: 25px;
+    width: 400px;
+    margin-left: 10px;
+    display: block;
+    float: left;
+    padding: 0 8px;
+    border: 1px solid #999;
+}
+
+#BottomPanel #EditPanel #EditSubmitButton {
+    height: 60px;
+    width: 60px;
+    position: relative;
+    float: right;
+    padding-left: 10px;
+    margin-left: 10px;
+    background-size: 21px;  /* 14px -> 150% */
+}
+
+/*
+    Editの変化
+*/
+#BasePanel.edit #BottomPanel {
+    bottom: 0px;
+}
