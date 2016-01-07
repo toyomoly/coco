@@ -28,19 +28,7 @@ $(function () {
             )
             .append($("<div></div>").addClass("block-e")
                 .append($("<div></div>").addClass("block-e-1")
-                    .append(TheSekiList[item.id.toLowerCase()] ? common.createButton("座席", "showmap").hover(
-                        function () {
-                            if (Manager.option.exShowmapHover) {
-                                $("#TheSekiMapBox").addClass("show");
-                                $("#TheSekiMap").attr("src", "./mapmini?id=" + item.id.toLowerCase());
-                            }
-                        },
-                        function () {
-                            if (Manager.option.exShowmapHover) {
-                                $("#TheSekiMapBox.show").removeClass("show").find("#TheSekiMap").attr("src", "");
-                            }
-                        }
-                    ) : "")
+                    .append(TheSekiList[item.id.toLowerCase()] ? common.createButton("座席", "showmap") : "")
                 )
             )
             .append($("<div></div>").addClass("block-o")
@@ -242,12 +230,7 @@ $(function () {
             })
             .on("click", "li .block-e .block-e-1 a.button.showmap", function () {
                 var tempId = $(this).closest("li").attr("data-id").toLowerCase();
-                if (Manager.option.exShowmapClick) {
-                    window.open("./map?id=" + tempId, "showpos");
-                } else {
-                    $("#TheSekiMapBox").removeClass("show").addClass("lock");
-                    $("#TheSekiMap").attr("src", "./map?id=" + tempId);
-                }
+                $("#TheSekiMap").addClass("show").attr("src", "./map?id=" + tempId);
             })
             .on("click", "li .block-p .block-p-z a.button.undo", function () {
                 var tempId = $(this).closest("li").attr("data-id");
@@ -267,11 +250,6 @@ $(function () {
                 temp.push(function () {
                     li.removeClass("openmenu");
                 });
-            });
-
-            // TheSekiMapBoxのclose
-            $("#TheSekiMapBox").on("click", ".closeMap", function () {
-                $("#TheSekiMapBox").removeClass("lock").attr("src", "");
             });
 
             // 下までスクロールしたら追加表示
@@ -802,17 +780,12 @@ $(function () {
             _addDirectPasteScr: "",
             _delDirectPasteScr: "EX.c(false);",
 
-            _addShowmapHover: false,
-            _addShowmapHoverScr: "EX.d(true);",
-            _delShowmapHoverScr: "",
-
-            _addShowmapClick: true,
-            _addShowmapClickScr: "",
-            _delShowmapClickScr: "EX.e(false);",
+            _addShowmap: false,
+            _addShowmapScr: "EX.d(true);",
+            _delShowmapScr: "",
 
             _editMyScr: function () {
                 var myScr = "";
-
                 if (this._addConfirm) {
                     $("#ConfigEtc .inputBox a.button.config.confirm.yes").addClass("on");
                     $("#ConfigEtc .inputBox a.button.config.confirm.no").removeClass("on");
@@ -823,40 +796,26 @@ $(function () {
                     $("#ConfigEtc .inputBox a.button.config.confirm.no").addClass("on");
                     myScr += this._delConfirmScr;
                 }
-
                 if (this._addDirectPaste) {
-                    // デフォルト
                     $("#ConfigEtc .inputBox a.button.config.paste.yes").addClass("on");
                     $("#ConfigEtc .inputBox a.button.config.paste.no").removeClass("on");
                     myScr += this._addDirectPasteScr;
                 } else {
+                    // デフォルト
                     $("#ConfigEtc .inputBox a.button.config.paste.yes").removeClass("on");
                     $("#ConfigEtc .inputBox a.button.config.paste.no").addClass("on");
                     myScr += this._delDirectPasteScr;
                 }
-
-                if (this._addShowmapHover) {
-                    $("#ConfigEtc .inputBox a.button.config.showmapHover.yes").addClass("on");
-                    $("#ConfigEtc .inputBox a.button.config.showmapHover.no").removeClass("on");
-                    myScr += this._addShowmapHoverScr;
+                if (this._addShowmap) {
+                    $("#ConfigEtc .inputBox a.button.config.showmap.yes").addClass("on");
+                    $("#ConfigEtc .inputBox a.button.config.showmap.no").removeClass("on");
+                    myScr += this._addShowmapScr;
                 } else {
                     // デフォルト
-                    $("#ConfigEtc .inputBox a.button.config.showmapHover.yes").removeClass("on");
-                    $("#ConfigEtc .inputBox a.button.config.showmapHover.no").addClass("on");
-                    myScr += this._delShowmapHoverScr;
+                    $("#ConfigEtc .inputBox a.button.config.showmap.yes").removeClass("on");
+                    $("#ConfigEtc .inputBox a.button.config.showmap.no").addClass("on");
+                    myScr += this._delShowmapScr;
                 }
-
-                if (this._addShowmapClick) {
-                    // デフォルト
-                    $("#ConfigEtc .inputBox a.button.config.showmapClick.yes").addClass("on");
-                    $("#ConfigEtc .inputBox a.button.config.showmapClick.no").removeClass("on");
-                    myScr += this._addShowmapClickScr;
-                } else {
-                    $("#ConfigEtc .inputBox a.button.config.showmapClick.yes").removeClass("on");
-                    $("#ConfigEtc .inputBox a.button.config.showmapClick.no").addClass("on");
-                    myScr += this._delShowmapClickScr;
-                }
-
                 $("#ConfigEtc .inputBox textarea").val(myScr);
             },
 
@@ -893,26 +852,15 @@ $(function () {
                         self._editMyScr();
                     }))
 
-                    .append($("<div></div>").addClass("title").text("座席表示（マウスオーバー）"))
-                    .append(common.createButton("表示する", "select config showmapHover yes", "ui-icon-radio").on("click", function () {
-                        self._addShowmapHover = true;
+                    .append($("<div></div>").addClass("title").text("マウスオーバーで座席の表示"))
+                    .append(common.createButton("表示する", "select config showmap yes", "ui-icon-radio").on("click", function () {
+                        self._addShowmap = true;
                         self._editMyScr();
                     }))
-                    .append(common.createButton("表示しない", "select config showmapHover no", "ui-icon-radio").on("click", function () {
-                        self._addShowmapHover = false;
+                    .append(common.createButton("表示しない", "select config showmap no", "ui-icon-radio").on("click", function () {
+                        self._addShowmap = false;
                         self._editMyScr();
                     }))
-
-                    .append($("<div></div>").addClass("title").text("座席表示（クリック）"))
-                    .append(common.createButton("別画面", "select config showmapClick yes", "ui-icon-radio").on("click", function () {
-                        self._addShowmapClick = true;
-                        self._editMyScr();
-                    }))
-                    .append(common.createButton("画面内", "select config showmapClick no", "ui-icon-radio").on("click", function () {
-                        self._addShowmapClick = false;
-                        self._editMyScr();
-                    }))
-
                     .append($(ta));
 
                 this._init = true;
@@ -924,9 +872,8 @@ $(function () {
                 }
                 var myScr = $.cookie("myScr") || "";
                 this._addConfirm = (myScr.indexOf(this._addConfirmScr) > -1);
-                this._addDirectPaste = !(myScr.indexOf(this._delDirectPasteScr) > -1);
-                this._addShowmapHover = (myScr.indexOf(this._addShowmapHoverScr) > -1);
-                this._addShowmapClick = !(myScr.indexOf(this._delShowmapClickScr) > -1);
+                this._addDirectPaste = (myScr.indexOf(this._addDirectPasteScr) > -1);
+                this._addShowmap = (myScr.indexOf(this._addShowmapScr) > -1);
                 this._editMyScr();
                 $("#ConfigEtc .inputBox textarea").val(myScr);
 
@@ -1040,8 +987,7 @@ $(function () {
             exConfirm: false,
             exDirectPaste: true,
             exReselect: [],
-            exShowmapHover: false,
-            exShowmapClick: true
+            exShowmap: false
         },
 
         _editVal: {
@@ -1210,8 +1156,7 @@ $(function () {
         a: function () {},
         b: function (b) { Manager.option.exConfirm = b; },
         c: function (b) { Manager.option.exDirectPaste = b; },
-        d: function (b) { Manager.option.exShowmapHover = b; },
-        e: function (b) { Manager.option.exShowmapClick = b; }
+        d: function (b) { Manager.option.exShowmap = b; }
     }
 
     Coco.Config = Config;

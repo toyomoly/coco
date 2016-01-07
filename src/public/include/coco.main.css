@@ -684,52 +684,20 @@ body {
             border-radius: 9px;
 }
 
-#MainPanel #ListPanel #TheSekiMapBox {
+#MainPanel #ListPanel #TheSekiMap {
     position: fixed;
-    top: 32px;
-    width: 400px;
+    top: 100%;
+    width: 100%;
     height: 100%;
     -webkit-transition: .3s;
     -ms-transition: .3s;
     transition: .3s;
-    margin-left: -402px;
     border: solid 1px #666;
-}
-
-#MainPanel #ListPanel #TheSekiMapBox.show,
-#MainPanel #ListPanel #TheSekiMapBox.lock {
-    margin-left: 0px;
-}
-
-#MainPanel #ListPanel #TheSekiMapBox.lock .closeMap {
-    float: left;
-    height: 100%;
-    width: 20px;
-    background-color: #e3e3e3;
-}
-
-#MainPanel #ListPanel #TheSekiMapBox.lock .closeMap.ui-icon-carat-d:after {
-    width:18px;
-    height:18px;
-    margin: 0px auto;
-    background-size: 12px;  /* 12px -> 100% */
-    background-color: #666;
-/*    background-color: rgba(0,0,0,.4); */
-    -webkit-border-radius: 9px;
-       -moz-border-radius: 9px;
-            border-radius: 9px;
-}
-
-#MainPanel #ListPanel #TheSekiMapBox #TheSekiMap {
-    float: left;
-    width: 400px;
-    height: 100%;
-    border: none;
     background-color: #ccc;
 }
 
-#MainPanel #ListPanel #TheSekiMapBox.lock #TheSekiMap {
-    width: 380px;
+#MainPanel #ListPanel #TheSekiMap.show {
+    top: 100px;
 }
 
 #MainPanel #UpdateStatusBox {
