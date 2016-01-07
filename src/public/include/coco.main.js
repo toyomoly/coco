@@ -14,15 +14,15 @@ $(function () {
 
             this._dom = $("<li></li>").addClass("theme" + item.statusCd).attr("data-id", item.id)
             .append($("<div></div>").addClass("block-a")
-                .append($("<div></div>").addClass("block-a-1").append(item.imgTag))
+                .append($("<div></div>").addClass("block-a-1").append(item.getImgElement()))
             )
             .append($("<div></div>").addClass("block-b")
                 .append($("<div></div>").addClass("block-b-1 textdata small").text(item.id))
-                .append($("<div></div>").addClass("block-b-2 textdata large").text(item.name))
-                .append($("<div></div>").addClass("block-b-3 textdata small").text(item.kana))
+                .append($("<div></div>").addClass("block-b-2 textdata " + (item.name.length < 10 ? "large" : "min-large")).text(item.name))
+                .append($("<div></div>").addClass("block-b-3 textdata small").text(item.kana).attr("title", item.romaji))
             )
             .append($("<div></div>").addClass("block-d")
-                .append($("<div></div>").addClass("block-d-1 textdata").text(item.section))
+                .append($("<div></div>").addClass("block-d-1 textdata").text(item.vSection))
                 .append($("<div></div>").addClass("block-d-2 textdata").text(item.rank))
                 .append($("<div></div>").addClass("block-d-3 textdata").append(item.phone))
             )
@@ -37,15 +37,12 @@ $(function () {
                 )
             )
             .append($("<div></div>").addClass("block-p")
-                .append($("<div></div>").addClass("block-p-1 textdata").text(item.jotai))
-                .append(Manager.UpdateBackup[item.id] ? $("<div></div>").addClass("block-p-z")
-                    .append(common.createButton("", "undo mini", "ui-icon-back"))
-                : "")
+                .append($("<div></div>").addClass("block-p-1 textdata memo").text(item.jotai))
                 .append($("<div></div>").addClass("block-p-z")
                     .append(Manager.UpdateBackup[item.id] ? common.createButton("", "undo mini", "ui-icon-back") : "")
                 )
-                .append($("<div></div>").addClass("block-p-2 textdata").text(item.yukisaki))
-                .append($("<div></div>").addClass("block-p-3 textdata").text(item.nichiji))
+                .append($("<div></div>").addClass("block-p-2 textdata memo").text(item.yukisaki))
+                .append($("<div></div>").addClass("block-p-3 textdata memo").text(item.nichiji))
                 .append($("<div></div>").addClass("block-p-y").text(item.lastUpdate))
             );
 
@@ -137,7 +134,7 @@ $(function () {
         update: function (item) {
             this._item = item;
             if (this.isDom) {
-                this._dom.removeClass().addClass("theme" + item.statusCd);
+                this._dom.removeClass("theme1 theme2 theme3 theme4").addClass("theme" + item.statusCd);
                 this._dom.find(".block-o .block-o-1 a.button").text(item.status);
                 this._dom.find(".block-p .block-p-1.textdata").text(item.jotai);
                 this._dom.find(".block-p .block-p-z").empty().append(Manager.UpdateBackup[item.id] ? common.createButton("", "undo mini", "ui-icon-back") : "");
@@ -229,8 +226,14 @@ $(function () {
                 self._appendListDom();
             })
             .on("click", "li .block-e .block-e-1 a.button.showmap", function () {
-                var tempId = $(this).closest("li").attr("data-id").toLowerCase();
-                $("#TheSekiMap").addClass("show").attr("src", "./map?id=" + tempId);
+                var li = $(this).closest("li");
+                // 他のliを非表示
+                $("#ListPanel li").exHide();
+                li.exShow();
+                // 座席表示
+                var tempId = li.attr("data-id").toLowerCase();
+                $("#TheSekiMapBox").addClass("show");
+                $("#TheSekiMap").attr("src", "./map?id=" + tempId);
             })
             .on("click", "li .block-p .block-p-z a.button.undo", function () {
                 var tempId = $(this).closest("li").attr("data-id");
@@ -252,6 +255,16 @@ $(function () {
                 });
             });
 
+            // TheSekiMapBoxのclose
+            $("#TheSekiMapBox").on("click", ".closeMap", function () {
+                $("#TheSekiMapBox").removeClass("show");
+                $("#TheSekiMap").attr("src", "");
+                var li = $("#ListPanel li:not('.hidden'):first");
+                var scrollHeight = li.prevAll().length * li.outerHeight();
+                $("#ListPanel li").exShow();
+                $("#ListPanel").scrollTop(scrollHeight);
+            });
+
             // 下までスクロールしたら追加表示
             var inner = $("#ListPanelInnerBox");
             var ListPanel = $("#ListPanel");
@@ -260,7 +273,7 @@ $(function () {
                 var scrollPosition = ListPanel.height() + ListPanel.scrollTop();
                 if (scrollHeight - scrollPosition < 50) {
                     //スクロールが下から50px以内に来た場合
-                    self._appendListDom(5);
+                    self._appendListDom(20);
                 }
             });
         },
@@ -461,14 +474,14 @@ $(function () {
                 $("#DownIcon").removeClass("ui-icon-carat-d").addClass("ui-icon-carat-u lock");
                 this._isLock = isLock;
             }
-            $("#SelectSectionList").addClass("open");
+            $("#SelectSectionListBox").addClass("open");
         },
 
         _closeList: function (isForce) {
             if (this._isLock && !isForce) {
                 return;
             }
-            $("#SelectSectionList").removeClass("open");
+            $("#SelectSectionListBox").removeClass("open");
             if (this._isLock) {
                 this._isLock = false;
                 $("#DownIcon").removeClass("ui-icon-carat-u lock").addClass("ui-icon-carat-d");
@@ -537,6 +550,16 @@ $(function () {
                 }
                 ListItem.setSort(sortKey, true);
             });
+            // 表示切替ボタン
+            var isSimple = false;
+            $("#SimpleIcon").on("click", function (e) {
+                isSimple = !isSimple;
+                if (isSimple) {
+                    $("#MainPanel").addClass("simple");
+                } else {
+                    $("#MainPanel").removeClass("simple");
+                }
+            });
             // ホームボタン
             $("#HomeIcon").on("click", function (e) {
                 if (Manager.option.myList.length > 0) {
@@ -566,11 +589,12 @@ $(function () {
                     if (!(
                         (item.id.toLowerCase().indexOf(v[j]) > -1) ||
                         (item.name.indexOf(v[j]) > -1) ||
-                        (item.section.indexOf(v[j]) > -1) ||
                         (item.kana.indexOf(v[j]) > -1) ||
                         (item.phone.toLowerCase().substr(item.phone.indexOf("&nbsp;") + 6).indexOf(v[j]) > -1) ||
+                        (item.vSection.toLowerCase().indexOf(v[j]) > -1) ||
                         (item.sectionCd.toLowerCase() == v[j]) ||
-                        (item.rank.indexOf(v[j]) > -1)
+                        (item.rank.indexOf(v[j]) > -1) ||
+                        (item.romaji.toLowerCase().indexOf(v[j]) > -1)
                     )) {
                         return false;
                     }
@@ -780,10 +804,6 @@ $(function () {
             _addDirectPasteScr: "",
             _delDirectPasteScr: "EX.c(false);",
 
-            _addShowmap: false,
-            _addShowmapScr: "EX.d(true);",
-            _delShowmapScr: "",
-
             _editMyScr: function () {
                 var myScr = "";
                 if (this._addConfirm) {
@@ -805,16 +825,6 @@ $(function () {
                     $("#ConfigEtc .inputBox a.button.config.paste.yes").removeClass("on");
                     $("#ConfigEtc .inputBox a.button.config.paste.no").addClass("on");
                     myScr += this._delDirectPasteScr;
-                }
-                if (this._addShowmap) {
-                    $("#ConfigEtc .inputBox a.button.config.showmap.yes").addClass("on");
-                    $("#ConfigEtc .inputBox a.button.config.showmap.no").removeClass("on");
-                    myScr += this._addShowmapScr;
-                } else {
-                    // デフォルト
-                    $("#ConfigEtc .inputBox a.button.config.showmap.yes").removeClass("on");
-                    $("#ConfigEtc .inputBox a.button.config.showmap.no").addClass("on");
-                    myScr += this._delShowmapScr;
                 }
                 $("#ConfigEtc .inputBox textarea").val(myScr);
             },
@@ -852,15 +862,6 @@ $(function () {
                         self._editMyScr();
                     }))
 
-                    .append($("<div></div>").addClass("title").text("マウスオーバーで座席の表示"))
-                    .append(common.createButton("表示する", "select config showmap yes", "ui-icon-radio").on("click", function () {
-                        self._addShowmap = true;
-                        self._editMyScr();
-                    }))
-                    .append(common.createButton("表示しない", "select config showmap no", "ui-icon-radio").on("click", function () {
-                        self._addShowmap = false;
-                        self._editMyScr();
-                    }))
                     .append($(ta));
 
                 this._init = true;
@@ -872,8 +873,7 @@ $(function () {
                 }
                 var myScr = $.cookie("myScr") || "";
                 this._addConfirm = (myScr.indexOf(this._addConfirmScr) > -1);
-                this._addDirectPaste = (myScr.indexOf(this._addDirectPasteScr) > -1);
-                this._addShowmap = (myScr.indexOf(this._addShowmapScr) > -1);
+                this._addDirectPaste = !(myScr.indexOf(this._delDirectPasteScr) > -1);
                 this._editMyScr();
                 $("#ConfigEtc .inputBox textarea").val(myScr);
 
@@ -889,14 +889,14 @@ $(function () {
             if (isLock) {
                 this._isLock = isLock;
             }
-            $("#SelectConfigList").addClass("open");
+            $("#SelectConfigListBox").addClass("open");
         },
 
         _closeList: function (isForce) {
             if (this._isLock && !isForce) {
                 return;
             }
-            $("#SelectConfigList").removeClass("open");
+            $("#SelectConfigListBox").removeClass("open");
             if (this._isLock) {
                 this._isLock = false;
             }
@@ -986,8 +986,7 @@ $(function () {
             mySection: [],
             exConfirm: false,
             exDirectPaste: true,
-            exReselect: [],
-            exShowmap: false
+            exReselect: []
         },
 
         _editVal: {
@@ -1156,7 +1155,7 @@ $(function () {
         a: function () {},
         b: function (b) { Manager.option.exConfirm = b; },
         c: function (b) { Manager.option.exDirectPaste = b; },
-        d: function (b) { Manager.option.exShowmap = b; }
+        d: function (b) { /* 現在未使用。Cookieに残っている可能性があるのでメソッドだけ残す。再利用可。 */ }
     }
 
     Coco.Config = Config;

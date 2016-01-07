@@ -21,10 +21,6 @@ object Application extends Controller {
     }
   }
 
-  def uracoco = Action {
-    Redirect("/!")
-  }
-
   def notFound(hoge: String) = Action {
     Redirect("/")
   }
