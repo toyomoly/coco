@@ -2,10 +2,17 @@ $(function () {
     // ライブラリ
     var common = Coco.Common;
 
-    // リストアイテム
-    var ListItem = {
-        _add: function (item) {
-            var li = $("<li></li>").addClass("theme" + item.statusCd).attr("data-id", item.id)
+    var ItemObject = function (item) {
+        this._item = item;
+        this._dom = null;
+        this.id = item.id;
+        this.isDom = false;
+    }
+    ItemObject.prototype = {
+        createDom: function () {
+            var item = this._item;
+
+            this._dom = $("<li></li>").addClass("theme" + item.statusCd).attr("data-id", item.id)
             .append($("<div></div>").addClass("block-a")
                 .append($("<div></div>").addClass("block-a-1").append(item.imgTag))
             )
@@ -34,11 +41,7 @@ $(function () {
             )
             .append($("<div></div>").addClass("block-o")
                 .append($("<div></div>").addClass("block-o-1")
-                    .append(common.createButton(
-                        item.statusCd == "1" ? "社内" :
-                        item.statusCd == "2" ? "社外" :
-                        item.statusCd == "3" ? "休暇" : "帰宅"
-                    ))
+                    .append(common.createButton(item.status))
                 )
             )
             .append($("<div></div>").addClass("block-p")
@@ -51,12 +54,15 @@ $(function () {
                 .append($("<div></div>").addClass("block-p-y").append(item.lastUpdate))
             );
 
-            return li;
+            this.isDom = true;
+            return this._dom;
         },
 
-        _edit: function (item, target_id) {
-            var target_li = $("#ListPanel li[data-id=" + (target_id || item.id) + "]");
+        edit: function (copyItem) {
+            var item = copyItem || this._item;
+            var target_li = this._dom;
             var newStatusCd = item.statusCd;
+            var self = this;
 
             // マネージャーに登録
             Manager.startEdit(function () {
@@ -119,7 +125,7 @@ $(function () {
                         var j = target_li.find(".block-s-2 input");
                         var y = target_li.find(".block-s-3 input");
                         var n = target_li.find(".block-s-4 input");
-                        Manager.setStatus(item.id, newStatusCd, j.val(), y.val(), n.val());
+                        Manager.setStatus(self._item.id, newStatusCd, j.val(), y.val(), n.val());
                         Manager.update();
                         return false;
                     }))
@@ -132,6 +138,22 @@ $(function () {
                 newStatusCd = t.attr("data-statusCd");
             });
         },
+
+        update: function (item) {
+            this._item = item;
+            if (this.isDom) {
+                this._dom.removeClass().addClass("theme" + item.statusCd);
+                this._dom.find(".block-o .block-o-1 a.button").text(item.status);
+                this._dom.find(".block-p .block-p-1.textdata").text(item.jotai);
+                this._dom.find(".block-p .block-p-2.textdata").text(item.yukisaki);
+                this._dom.find(".block-p .block-p-3.textdata").text(item.nichiji);
+                this._dom.find(".block-p .block-p-y").text(item.lastUpdate);
+            }
+        }
+    }
+
+    // リストアイテム
+    var ListItem = {
 
         init: function () {
             var self = this;
@@ -171,11 +193,13 @@ $(function () {
                 close();
             })
             .on("click", "a.button.edit", function () {
-                var item = Manager.getListItemById(id);
-                if (item) {
-                    self._edit(item);
-                    close();
-                }
+                self._selectedItemObjs.some(function (itemObj) {
+                    if (itemObj.id == id) {
+                        itemObj.edit();
+                        close();
+                        return true;
+                    }
+                });
             })
             .on("click", "a.button.copy", function () {
                 var item = Manager.getListItemById(id);
@@ -190,10 +214,16 @@ $(function () {
                 if (Manager.option.exDirectPaste) {
                     Manager.setStatus(id, copy_item.statusCd, copy_item.jotai, copy_item.yukisaki, copy_item.nichiji);
                     Manager.update();
+                    close();
                 } else {
-                    self._edit(copy_item, id);
+                    self._selectedItemObjs.some(function (itemObj) {
+                        if (itemObj.id == id) {
+                            itemObj.edit(copy_item);
+                            close();
+                            return true;
+                        }
+                    });
                 }
-                close();
             })
             .hover(function () { open(); }, close);
 
@@ -277,22 +307,14 @@ $(function () {
             Manager.cancelEdit();
 
             // リスト選択
-            this._selectedList = this._selectFunc();
-
-            // ソート
-            if (this._sortKey) {
-                var key = this._sortKey;
-                var asc = (this._sortAsc) ? 1 : -1;
-                this._selectedList.sort(function (a, b) {
-                    if (a[key] < b[key]) { return -1 * asc; }
-                    if (a[key] > b[key]) { return 1 * asc; }
-                    return 0;
-                });
-            }
+            this._selectedItemObjs = this._getNewItems().map(function (item) {
+                return new ItemObject(item);
+            });
 
             // リストの初期化
             this._empty();
             // リストに要素追加
+            this._isMore = true;
             this._appendListDom();
 
             // パネルの表示
@@ -305,24 +327,60 @@ $(function () {
             });
         },
         _selectFunc: function () { return []; },
-        _selectedList: [],
+        _selectedItemObjs: [],
+        _isMore: false,
         _appendListDom: function (max) {
             max = max || 20;
             var m = $("#ListPanel .more");
-            for (var i = 0; i < max; i++) {
-                if (this._selectedList.length > 0) {
-                    var s = this._selectedList.shift();
-                    m.before(this._add(s));
+            var cnt = 0;
+            this._isMore = this._isMore && this._selectedItemObjs.some(function (itemObj) {
+                if (!itemObj.isDom) {
+                    if (cnt < max) {
+                        m.before(itemObj.createDom());
+                        cnt++;
+                    } else {
+                        // DOM未生成アイテムがある
+                        return true;
+                    }
                 }
-            }
-            if (this._selectedList.length == 0) {
-                m.exHide();
-            } else {
+            });
+            if (this._isMore) {
                 m.exShow();
+            } else {
+                m.exHide();
             }
         },
         _empty: function () {
             $("#ListPanel li").remove();
+        },
+
+        _getNewItems: function () {
+            var items = this._selectFunc();
+
+            // ソート
+            if (this._sortKey) {
+                var key = this._sortKey;
+                var asc = (this._sortAsc) ? 1 : -1;
+                items.sort(function (a, b) {
+                    if (a[key] < b[key]) { return -1 * asc; }
+                    if (a[key] > b[key]) { return 1 * asc; }
+                    return 0;
+                });
+            }
+
+            return items;
+        },
+
+        update: function () {
+            var items = this._getNewItems();
+            if (items.length != this._selectedItemObjs.length) {
+                // console.log("Length different. " + items.length + " != " + this._selectedItemObjs.length);
+                this.Reselect();
+                return;
+            }
+            this._selectedItemObjs.forEach(function (itemObj, i) {
+                itemObj.update(items[i]);
+            });
         }
     }
 
@@ -891,8 +949,6 @@ $(function () {
 
     // マネージャー
     var Manager = {
-        ver: 0,
-
         List: [],
         List2: [],
         SectionList: [],
@@ -949,7 +1005,7 @@ $(function () {
             this.List = common.concatList2(t.d, this.List2);
             UpdateTime.refreshTime();
             if (!this._stopReload) {
-                ListItem.Reselect();
+                ListItem.update();
             }
         },
         reload: function (afterFunc) {
@@ -959,7 +1015,7 @@ $(function () {
 
             Coco.Ajax.getYukisakiList(function (t) {
                 self.List = common.concatList2(t.d, self.List2);
-                ListItem.Reselect();
+                ListItem.update();
                 UpdateTime.refreshTime();
                 self._stopReload = false;
                 if (afterFunc){ afterFunc(); }
@@ -995,6 +1051,7 @@ $(function () {
                     "Nichiji": this._editVal.nichiji
                 },
                 function (t) {
+                    self.cancelEdit();
                     self.reload();
                 }
             );

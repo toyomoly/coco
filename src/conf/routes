@@ -17,6 +17,9 @@ POST   /post/getJiji           controllers.Jiji.getJijiByPost()
 POST   /post/setJiji           controllers.Jiji.setJijiByPost()
 POST   /post/checkPing         controllers.Jiji.checkPingByPost()
 
+# WebSocket
+GET    /ws/                    controllers.Yukisaki.socket
+
 # Home age
 GET    /!                      controllers.Application.index(develop:Boolean = true, mobile:Boolean = false)
 GET    /                       controllers.Application.index(develop:Boolean = false, mobile:Boolean = false)
@@ -29,10 +32,6 @@ GET    /uracoco/               controllers.Application.uracoco
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file           controllers.Assets.at(path="/public", file)
-
-
-# Test
-GET    /ws/                    controllers.Yukisaki.socket
 
 # NotFound
 GET    /*hoge                  controllers.Application.notFound(hoge:String)

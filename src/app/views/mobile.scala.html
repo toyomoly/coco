@@ -1,4 +1,4 @@
-@(develop: Boolean)
+@(develop: Boolean)(implicit r: RequestHeader)
 
 <!DOCTYPE html>
 
@@ -124,7 +124,9 @@
     <script src="./assets/include/coco.mobile.js"></script>
     <script>
         $(function () {
-            Coco.Manager.init();
+            Coco.Manager.init(function () {
+                Coco.Manager.setAutoReload("@routes.Yukisaki.socket.webSocketURL()");
+            });
         });
     </script>
 </body>

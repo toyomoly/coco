@@ -2,10 +2,18 @@ $(function () {
     // ライブラリ
     var common = Coco.Common;
 
-    // リストアイテム
-    var ListItem = {
-        _add: function (item) {
-            var li = $("<li></li>").addClass("theme" + item.statusCd).attr("data-id", item.id)
+    var ItemObject = function (item) {
+        this._item = item;
+        this._dom = null;
+        this.id = item.id;
+        this.isDom = false;
+        this.isDetail = false;
+    }
+    ItemObject.prototype = {
+        createDom: function () {
+            var item = this._item;
+
+            this._dom = $("<li></li>").addClass("theme" + item.statusCd).attr("data-id", item.id)
             .append($("<div></div>").addClass("block-a")
                 .append($("<div></div>").addClass("block-a-1").append(item.imgTag))
             )
@@ -17,12 +25,7 @@ $(function () {
                 .append($("<div></div>").addClass("block-b-2 textdata large").append(item.name))
                 .append($("<div></div>").addClass("block-b-3")
                     .append($("<div></div>").addClass("block-view")
-                        .append(common.createButton(
-                            item.statusCd == "1" ? Coco.Text.StatusList[0] :
-                            item.statusCd == "2" ? Coco.Text.StatusList[1] :
-                            item.statusCd == "3" ? Coco.Text.StatusList[2] : Coco.Text.StatusList[3],
-                            "status"
-                        ))
+                        .append(common.createButton(item.status, "status"))
                         .append($("<div></div>").addClass("textdata textdata-comment").append(item.comment))
                     )
                 )
@@ -30,15 +33,12 @@ $(function () {
             .append($("<div></div>").addClass("block-c ui-icon-carat-r button-icon")
             );
 
-            return li;
+            this.isDom = true;
+            return this._dom;
         },
 
-        _edit: function (id) {
-            // ここのアイテム選択が課題（複数所属の人は？）
-            var item = Manager.getListItemById(id);
-            if (!item) {
-                return;
-            }
+        edit: function () {
+            var item = this._item;
 
             // マネージャーに登録
             Manager.startEdit(function () {
@@ -52,30 +52,22 @@ $(function () {
             $("#EditTextComment").val(item.comment);
         },
 
-        _createSelectStatus: function (defaultValue) {
-            var sel = $("<select></select>").addClass("selectStatus");
-            Coco.Text.StatusList.forEach(function (s, i) {
-                sel.append($("<option></option>").text(s).val("" + (i + 1)));
-            });
-            sel.val(defaultValue);
-            return sel;
+        update: function (item) {
+            this._item = item;
+            if (this.isDom) {
+                this._dom.removeClass().addClass("theme" + item.statusCd);
+                this._dom.find(".block-b .block-b-3 .block-view a.button").text(item.status);
+                this._dom.find(".block-b .block-b-3 .block-view .textdata.textdata-comment").text(item.comment);
+            }
+            if (this.isDetail) {
+                this.setDetail();
+            }
         },
 
-        _detail: function (id) {
-            // ここのアイテム選択が課題（複数所属の人は？）
-            var item = Manager.getListItemById(id);
-            if (!item) {
-                return;
-            }
+        setDetail: function () {
+            var item = this._item;
 
-            // マネージャーに登録
-            //Manager.startEdit(function () {
-            //    $("#BasePanel").removeClass("detail");
-            //});
-
-            $("#BasePanel").addClass("detail");
             var liBase = $("#DetailBaseLi").attr("data-id", item.id);
-
             liBase.find(".block-a .block-a-1").empty().append(item.imgTag);
             liBase.find(".textdata.data-id").text(item.id);
             liBase.find(".textdata.data-name").text(item.name);
@@ -84,22 +76,26 @@ $(function () {
             // liBase.find(".textdata.data-sectionCd").text(item.sectionCd);
             liBase.find(".textdata.data-rank").text(item.rank);
             liBase.find(".textdata.data-phone").empty().append(item.phone);
-            if (TheSekiList[id.toLowerCase()] ) {
+            if (TheSekiList[item.id.toLowerCase()] ) {
                 liBase.find(".block-line.data-section").addClass("ui-icon-action button-icon");
             } else {
                 liBase.find(".block-line.data-section").removeClass("ui-icon-action button-icon");
             }
 
             var liEdit = $("#DetailEditLi").removeClass().addClass("theme" + item.statusCd).attr("data-id", item.id);
-            liEdit.find(".block-c .block-view a.button.status").text(
-                item.statusCd == "1" ? Coco.Text.StatusList[0] :
-                item.statusCd == "2" ? Coco.Text.StatusList[1] :
-                item.statusCd == "3" ? Coco.Text.StatusList[2] : Coco.Text.StatusList[3]
-            );
+            liEdit.find(".block-c .block-view a.button.status").text(item.status);
             liEdit.find(".block-c .block-view .data-comment").text(item.comment);
-
             liEdit.find(".data-lastUpdate").text(item.lastUpdate);
+
+            this.isDetail = true;
         },
+        resetDetail: function () {
+            this.isDetail = false;
+        }
+    }
+
+    // リストアイテム
+    var ListItem = {
 
         init: function () {
             var self = this;
@@ -113,7 +109,14 @@ $(function () {
             // リストから詳細表示
             .on("tap", "li", function () {
                 var id = $(this).closest("li").attr("data-id");
-                self._detail(id);
+                self._selectedItemObjs.some(function (itemObj) {
+                    if (itemObj.id == id) {
+                        itemObj.setDetail();
+                        // パネル表示
+                        $("#BasePanel").addClass("detail");
+                        return true;
+                    }
+                });
                 // イベントストップ
                 return false;
             });
@@ -134,6 +137,9 @@ $(function () {
             // 詳細からリストに戻る
             $("#DetailTopMenu").on("tap", function () {
                 Manager.cancelEdit();
+                self._selectedItemObjs.forEach(function (itemObj) {
+                    itemObj.resetDetail();
+                });
                 $("#BasePanel").removeClass("detail");
                 // イベントストップ
                 return false;
@@ -144,7 +150,12 @@ $(function () {
                     Manager.cancelEdit();
                 } else {
                     var id = $(this).closest("li").attr("data-id");
-                    self._edit(id);
+                    self._selectedItemObjs.some(function (itemObj) {
+                        if (itemObj.id == id) {
+                            itemObj.edit();
+                            return true;
+                        }
+                    });
                 }
                 // イベントストップ
                 return false;
@@ -214,52 +225,38 @@ $(function () {
             // this.Reselect();
         },
 
-        Reselect: function (selectFunc) {
-            if (selectFunc) {
-                this._selectFunc = selectFunc;
-            } else {
-                selectFunc = this._selectFunc;
+        ReselectBySearch: function (selectFunc) {
+            this._selectFunc = function () {
+                var selected = [];
+                return Manager.List.filter(function (item, i) {
+                    if ($.inArray(item.id, selected) > -1) { return false; }
+                    if (selectFunc(item)) {
+                        selected.push(item.id);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
             }
+            this.Reselect();
+        },
+        Reselect: function (selectFunc) {
 
-            var isDetail = $("#BasePanel").hasClass("detail");
             // 編集キャンセル
             Manager.cancelEdit();
 
             // リスト選択
-            var selected = [];
-            this._selectedList = Manager.List.filter(function (item, i) {
-                if ($.inArray(item.id, selected) > -1) { return false; }
-                if (selectFunc(item)) {
-                    selected.push(item.id);
-                    return true;
-                } else {
-                    return false;
-                }
+            this._selectedItemObjs = this._getNewItems().map(function (item) {
+                return new ItemObject(item);
             });
 
-            // ソート
-            if (this._sortKey) {
-                var key = this._sortKey;
-                var asc = (this._sortAsc) ? 1 : -1;
-                this._selectedList.sort(function (a, b) {
-                    if (a[key] < b[key]) { return -1 * asc; }
-                    if (a[key] > b[key]) { return 1 * asc; }
-                    return 0;
-                });
-            }
-
             // 件数表示
-            $("#ListCount").text(this._selectedList.length + "件");
+            $("#ListCount").text(this._selectedItemObjs.length + "件");
             // リストの初期化
             this._empty();
             // リストに要素追加
+            this._isMore = true;
             this._appendListDom();
-
-            // Detailの表示
-            if (isDetail) {
-                var id = $("#DetailListPanel li").attr("data-id");
-                this._detail(id);
-            }
 
             // パネルの表示
             $("[data-panelType=mainContents]").exHide();
@@ -267,41 +264,60 @@ $(function () {
         },
 
         _selectFunc: function () { return []; },
-        _selectedList: [],
+        _selectedItemObjs: [],
+        _isMore: false,
         _appendListDom: function (max) {
             max = max || 20;
             var m = $("#ListPanel .more");
-            for (var i = 0; i < max; i++) {
-                if (this._selectedList.length > 0) {
-                    var s = this._selectedList.shift();
-                    m.before(this._add(s));
+            var cnt = 0;
+            this._isMore = this._isMore && this._selectedItemObjs.some(function (itemObj) {
+                if (!itemObj.isDom) {
+                    if (cnt < max) {
+                        m.before(itemObj.createDom());
+                        cnt++;
+                    } else {
+                        // DOM未生成アイテムがある
+                        return true;
+                    }
                 }
-            }
-            if (this._selectedList.length == 0) {
-                m.exHide();
-            } else {
+            });
+            if (this._isMore) {
                 m.exShow();
+            } else {
+                m.exHide();
             }
         },
         _empty: function () {
             $("#ListPanel li").remove();
-        }
-    }
+        },
 
-    // 更新時刻
-    var UpdateTime = {
-        init: function () {
-            $("#LastUpdate").on("tap", function () {
-                Manager.reload();
+        _getNewItems: function () {
+            var items = this._selectFunc();
+
+            // ソート
+            if (this._sortKey) {
+                var key = this._sortKey;
+                var asc = (this._sortAsc) ? 1 : -1;
+                items.sort(function (a, b) {
+                    if (a[key] < b[key]) { return -1 * asc; }
+                    if (a[key] > b[key]) { return 1 * asc; }
+                    return 0;
+                });
+            }
+
+            return items;
+        },
+
+        update: function () {
+            var items = this._getNewItems();
+            if (items.length != this._selectedItemObjs.length) {
+                // console.log("Length different. " + items.length + " != " + this._selectedItemObjs.length);
+                this.Reselect();
+                return;
+            }
+            this._selectedItemObjs.forEach(function (itemObj, i) {
+                itemObj.update(items[i]);
             });
-            // this.refreshTime();
-        },
-        waiting: function () {
-            $("#LastUpdate").addClass("waiting");
-        },
-        refreshTime: function () {
-            $("#LastUpdate").removeClass("waiting");
-            $("#LastUpdateTime").text(common.getTime());
         }
     }
 
@@ -322,7 +338,7 @@ $(function () {
 
         _selectGroup: function () {
             var v = $("#SelectGroupList").find("option:selected").val();
-            ListItem.Reselect(function (item) {
+            ListItem.ReselectBySearch(function (item) {
                 return (item.section == v);
             });
         },
@@ -330,7 +346,7 @@ $(function () {
         _selectInitial: function () {
             var a = $("#SelectInitialList").find("option:selected").val();
             var ex = new RegExp("^[" + a + "]");
-            ListItem.Reselect(function (item) {
+            ListItem.ReselectBySearch(function (item) {
                 return item.kana.match(ex);
             });
         },
@@ -424,7 +440,7 @@ $(function () {
         _search: function () {
             var newKeyword = $("#SearchKeywordTextBox").val().toLowerCase().replace("　", " ");
             var v = newKeyword.split(" ");
-            ListItem.Reselect(function (item) {
+            ListItem.ReselectBySearch(function (item) {
                 for (var j = 0, len = v.length; j < len; j++) {
                     if (!(
                         (item.id.toLowerCase().indexOf(v[j]) > -1) ||
@@ -476,23 +492,31 @@ $(function () {
             }
             this._stopReload = false;
         },
-        setAutoReload: function (interval) {
+        setAutoReload: function (wsURI) {
+            if (!WebSocket) { return; }
             var self = this;
-            setInterval(function () {
-                if (self._stopReload == false) {
-                    self.reload();
+            var ws = new WebSocket(wsURI);
+            ws.onmessage = function(event) {
+                if (event && event.data) {
+                    self.reloadByWebSocket(JSON.parse(event.data));
+                } else {
+                    console.log("WebSocket: reget no data");
                 }
-            }, interval);
+            }
+        },
+        reloadByWebSocket: function (t) {
+            this.List = common.concatList2(t.d, this.List2);
+            if (!this._stopReload) {
+                ListItem.update();
+            }
         },
         reload: function (afterFunc) {
-            UpdateTime.waiting();
             this._stopReload = true;
             var self = this;
 
             Coco.Ajax.getYukisakiList(function (t) {
                 self.List = common.concatList2(t.d, self.List2);
-                ListItem.Reselect();
-                UpdateTime.refreshTime();
+                ListItem.update();
                 self._stopReload = false;
                 if (afterFunc) { afterFunc(); }
             });
@@ -565,7 +589,6 @@ $(function () {
             }
 
             // 初期化処理
-            UpdateTime.init();
             ListItem.init();
             //Config.init();
             Search.init();
@@ -575,7 +598,7 @@ $(function () {
             // 部署取得
             this.getSection(function () {
                 Search.createGroup();
-                Manager.reload();
+                Manager.reload(afterReload);
             });
         }
     }

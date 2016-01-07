@@ -33,10 +33,10 @@ object AutoRefresh {
         channel |>> loggerIteratee
     }
 
-    // Make the robot talk every 30 seconds
+    // Reget every 20 seconds
     Akka.system.scheduler.schedule(
       5 seconds, // start
-      10 seconds, // interval
+      20 seconds, // interval
       ws,
       Reget)
   }

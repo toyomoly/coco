@@ -78,6 +78,9 @@ object Yukisaki extends Controller {
     _updateYukisaki(UserID, StatusCD, Jotai, Yukisaki, Nichiji, "")
   }
 
+  /* ==================================================
+   * socket
+   * ================================================== */
   def socket = WebSocket.async[JsValue] { request =>
     YukisakiWS.join
   }
