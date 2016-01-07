@@ -82,13 +82,13 @@ object YukisakiWS {
   }
 
   def getSectionListFuture: Future[Response] = {
-    WS.url("http://yukisaki/WebService.asmx/GetSectionList").post(Json.obj())
+    WS.url(play.Configuration.root.getString("yukisakiWebServicePath") + "WebService.asmx/GetSectionList").post(Json.obj())
   }
   def getYukisakiListFuture: Future[Response] = {
-    WS.url("http://yukisaki/WebService.asmx/GetYukisakiList").post(Json.obj())
+    WS.url(play.Configuration.root.getString("yukisakiWebServicePath") + "WebService.asmx/GetYukisakiList").post(Json.obj())
   }
   def updateYukisakiFuture(UserID: String, StatusCD: String, Jotai: String, Yukisaki: String, Nichiji: String): Future[Response] = {
-    WS.url("http://yukisaki/WebService.asmx/UpdateYukisaki").post(Json.obj(
+    WS.url(play.Configuration.root.getString("yukisakiWebServicePath") + "WebService.asmx/UpdateYukisaki").post(Json.obj(
       "UserID" -> UserID,
       "StatusCD" -> StatusCD,
       "Jotai" -> Jotai,
