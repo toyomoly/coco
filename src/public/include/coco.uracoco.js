@@ -226,7 +226,6 @@ $(function () {
                 return false;
             })
             .on("click", "li[data-configType=note]", function (e) {
-                //window.open("note.txt", "note");
                 self.ReleaseNote.open();
                 self._closeList(true);
                 return false;
@@ -236,17 +235,5 @@ $(function () {
         }
     });
 
-    // バージョン
-    Manager.ver = 20140210;
-    var afterReload = function () {}
-    $("#ReleaseYMD").text("2014/02/10");
-//    if ($.cookie("version") != Manager.ver) {
-//        afterReload = function () {
-//            Coco.Config.ReleaseNote.open();
-//        }
-//    }
-    $.cookie("version", Manager.ver, { expires: 365 });
-
-    Manager.init(afterReload);
     Coco.Config.exInit();
 });

@@ -20,7 +20,6 @@
         if (navigator.userAgent.match(/(?:iPhone|iPod|Android)/)) {
             location.href = "./mobile";
         }
-        console.log("@routes.Yukisaki.socket.webSocketURL()");
     </script>
     }
 </head>
@@ -86,7 +85,7 @@
             <div class="back"></div>
         </div>
         <div id="ConfigNote" class="hidden" data-panelType="mainContents">
-            <div class="summary">ReleaseNote<br />最終更新日：<span id="ReleaseYMD">yyyy/MM/dd</span></div>
+            <div class="summary">ReleaseNote</div>
             <div class="inputBox">
                 <iframe></iframe>
             </div>
@@ -165,12 +164,13 @@
     <script src="./assets/include/coco.main.js"></script>
     @if(develop) {
     <script src="./assets/include/coco.uracoco.js"></script>
-    } else {
+    }
     <script>
         $(function () {
-            Coco.Manager.init();
+            Coco.Manager.init(function () {
+                Coco.Manager.setAutoReload("@routes.Yukisaki.socket.webSocketURL()");
+            });
         });
     </script>
-    }
 </body>
 </html>

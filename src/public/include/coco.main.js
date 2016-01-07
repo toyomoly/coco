@@ -933,13 +933,24 @@ $(function () {
             }
             this._stopReload = false;
         },
-        setAutoReload: function (interval) {
+        setAutoReload: function (wsURI) {
+            if (!WebSocket) { return; }
             var self = this;
-            setInterval(function () {
-                if (self._stopReload == false) {
-                    self.reload();
+            var ws = new WebSocket(wsURI);
+            ws.onmessage = function(event) {
+                if (event && event.data) {
+                    self.reloadByWebSocket(JSON.parse(event.data));
+                } else {
+                    console.log("WebSocket: reget no data");
                 }
-            }, interval);
+            }
+        },
+        reloadByWebSocket: function (t) {
+            this.List = common.concatList2(t.d, this.List2);
+            UpdateTime.refreshTime();
+            if (!this._stopReload) {
+                ListItem.Reselect();
+            }
         },
         reload: function (afterFunc) {
             UpdateTime.waiting();
@@ -1068,16 +1079,4 @@ $(function () {
 
     Coco.Config = Config;
     Coco.Manager = Manager;
-    
-    var receiveEvent = function(event) {
-        console.log(event.data || "empty");
-    }
-
-    window.ws = new WebSocket("ws://localhost:9000/ws/"); 
-    ws.onmessage = receiveEvent;
-    window.send = function (s) {
-        ws.send(JSON.stringify({text: s}));
-        //ws.send(s);
-    }
-    
 });
