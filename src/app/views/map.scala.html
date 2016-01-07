@@ -1,0 +1,338 @@
+@(id: String)
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>The席</title>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #TheSekiPanel {
+            overflow: hidden;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #CCCCCC;
+        }
+
+        #TheSekiPanel #MapPanel {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #TheSekiPanel #MapBaseImg {
+            /*    position    : absolute; */
+            /*    z-index     : -1; */
+        }
+
+        #TheSekiPanel #MapBase {
+            position: absolute;
+        }
+
+        #TheSekiPanel #MapBase .BoxItem {
+            position: absolute;
+            overflow: hidden;
+            cursor: pointer;
+            color: #000099;
+            background: transparent;
+            background: rgba(255, 0, 0, .15);
+            border: solid 2px red;
+        }
+    </style>
+</head>
+<body>
+    <div id="TheSekiPanel">
+        <div id="MapPanel">
+            <div id="MapBase">
+                <img id="MapBaseImg" src="./assets/data/MapBaseImg.png" />
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/include/jquery-2.0.3.min.js"></script>
+    <script src="./assets/data/TheSekiList.js"></script>
+    <script>
+        $(function () {
+
+            MapManager = function () {
+
+                var MapPanel = document.getElementById("MapPanel");
+                this.MapBase = document.getElementById("MapBase");
+                this._BaseImg = document.getElementById("MapBaseImg");
+                this._BaseImg.style.width = (this._MAP_BASE_IMG_WIDTH * this._MAP_BASE_IMG_DEFAULT_RATE) + "px";
+                this._BaseImg.galleryimg = false;
+                //    this.Panel = Panel;
+
+                this._enableScroll = true;
+                this._enableWheel = true;
+
+                this._nowX = 0;
+                this._nowY = 0;
+                this._dx = 0;
+                this._dy = 0;
+                this._lastPosX = 0;
+                this._lastPosY = 0;
+
+                this._nowZoom = 0;
+
+                // イベント付加
+                var self = this;
+                $(MapPanel).on("mousedown", function (e) {
+                    self._startScroll(e);
+                }).on("mouseup", function (e) {
+                    self._stopScroll(e);
+                }).on("mousemove", function (e) {
+                    self._mouseMove(e);
+                }).on("mousedown", function (e) {
+                    self._startScroll(e);
+                }).on("mousewheel DOMMouseScroll", function (e) {
+                    self._mouseWheel(e);
+                });
+
+                this._BaseImg.onmousedown = function (e) { return false; };
+                this._BaseImg.onmousemove = function (e) { return false; };
+
+                this._moveByScroll = this._moveByScroll.bind(this);
+
+                this._resetMapBase();
+            }
+            MapManager.prototype = {
+
+                _SCROLL_INTERVAL_TIME: 25,
+                _ZOOM_RATE_BASE: 1.5,
+                _MAP_BASE_IMG_WIDTH: 2400,
+                _MAP_BASE_IMG_DEFAULT_RATE: 0.75,
+
+                _startScroll: function (e) {
+
+                    // フラグがONのときだけスクロール許可
+                    if (!this._enableScroll) { return; }
+
+                    this._dx = 0;
+                    this._dy = 0;
+
+                    if (this._stopFunction) {
+                        this._stopFunction();
+                    }
+
+                    var self = this;
+                    this._scrollInterval = setInterval(function () {
+                        self._moveByScroll();
+                    }, this._SCROLL_INTERVAL_TIME);
+
+                    // IE用　イベントキャプチャー
+                    if (e.target.setCapture) {
+                        e.target.setCapture(false);
+                    }
+
+                    this._stopFunction = function () {
+                        if (e.target.releaseCapture) {
+                            e.target.releaseCapture(false);
+                        }
+                        if (self._scrollInterval) { clearInterval(self._scrollInterval); }
+                        self._scrollInterval = null;
+                    };
+                },
+
+                _stopScroll: function (e) {
+
+                    if (this._stopFunction) {
+                        this._stopFunction();
+                        this._stopFunction = null;
+                    }
+
+                },
+
+                _mouseMove: function (e) {
+
+                    var nowPosX = e.clientX;
+                    var nowPosY = e.clientY;
+
+                    this._dx += (nowPosX - this._lastPosX);
+                    this._dy += (nowPosY - this._lastPosY);
+
+                    this._lastPosX = nowPosX;
+                    this._lastPosY = nowPosY;
+                },
+
+                _moveByScroll: function () {
+
+                    this._nowX += this._dx;
+                    this._nowY += this._dy;
+
+                    this._dx = 0;
+                    this._dy = 0;
+
+                    this._resetMapBase();
+                },
+
+                MoveByPos: function (x, y) {
+
+                    var panelSize = MainManager.GetPanelSize();
+                    var toX = (panelSize.x / 2) - x;
+                    var toY = (panelSize.y / 2) - y;
+                    this._moveByPos(toX, toY);
+                },
+
+                _moveByPos: function (x, y) {
+
+                    this._nowX = x;
+                    this._nowY = y;
+                    this._resetMapBase();
+                },
+
+                _resetMapBase: function () {
+
+                    var st = this.MapBase.style;
+                    st.left = this._nowX + "px";
+                    st.top = this._nowY + "px";
+                },
+
+                _mouseWheel: function (e) {
+
+                    var beforeRate = this.GetZoomRate();
+
+                    //縮尺を変更する
+                    var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;   // IE:wheelDelta, FF:detail
+                    if (delta > 0) {
+                        this._nowZoom++;
+                    } else {
+                        this._nowZoom--;
+                    }
+
+                    var afterRate = this.GetZoomRate();
+                    var distRate = afterRate / beforeRate;
+
+                    // 中心座標の補正
+                    var panelSize = MainManager.GetPanelSize();
+                    this._nowX = (this._nowX * distRate) - ((panelSize.x / 2) * (distRate - 1))
+                    this._nowY = (this._nowY * distRate) - ((panelSize.y / 2) * (distRate - 1))
+
+                    this._resetMapBase();
+
+                    // ベース画像リサイズ
+                    this._BaseImg.style.width = (this._MAP_BASE_IMG_WIDTH * this._MAP_BASE_IMG_DEFAULT_RATE * afterRate) + "px";
+
+                    // アイテム再描画
+                    MainManager.ItemManager.ResetItem();
+                },
+
+                ResetPos: function () {
+                    this.MoveByPos(0, 0);
+                },
+
+                GetPos: function () {
+                    return {
+                        x: this._nowX,
+                        y: this._nowY
+                    }
+                },
+                GetZoom: function () {
+                    return this._nowZoom;
+                },
+                GetZoomRate: function () {
+                    return Math.pow(this._ZOOM_RATE_BASE, this._nowZoom);
+                }
+            }
+
+            ItemManager = function (Main) {
+                this._ItemList = TheSekiList;
+            }
+            ItemManager.prototype = {
+
+                _UNDEF_ID: "undef",
+
+                _createDom: function (id, parentElement) {
+
+                    var item = this._ItemList[id];
+                    item.DOM = document.createElement("div");
+                    item.DOM.id = "BoxItem_" + id;
+                    item.DOM.className = "BoxItem";
+                    parentElement.appendChild(item.DOM);
+
+                    this.__resizeDom_single(item);
+                },
+
+                ResetItem: function () {
+
+                    var rate = MainManager.MapManager.GetZoomRate();
+                    for (var id in this._ItemList) {
+                        this.__resizeDom_single(this._ItemList[id], rate);
+                    }
+                },
+                __resizeDom_single: function (item, rate) {
+
+                    rate = rate || MainManager.MapManager.GetZoomRate();  // 引数で既に渡されていれば再計算の必要はない
+
+                    // 2013.04.01 追加
+                    if (!item.DOM) { return; }
+
+                    var st = item.DOM.style;
+
+                    st.top = (item.t * rate) + "px";
+                    st.left = (item.l * rate) + "px";
+
+                    var h = (item.h * rate);
+                    var w = (item.w * rate);
+                    st.height = (h - 2) + "px";
+                    st.width = (w - 2) + "px";
+                    st.pixelHeight = (h - 2);       // IE
+                    st.pixelWidth = (w - 2);       // IE
+                },
+
+                SelectItemById: function (id) {
+
+                    if (!this._ItemList[id]) {
+                        id = this._UNDEF_ID;
+                    }
+                    this._createDom(id, MainManager.MapManager.MapBase);
+                    this._selectItem(this._ItemList[id].DOM);
+                },
+
+                CenteringSelectedItem: function () {
+
+                    if (!this._currentSelectedItem) { return; }
+
+                    var i = this._currentSelectedItem;
+                    MainManager.MapManager.MoveByPos(i.offsetLeft + (i.offsetWidth / 2), i.offsetTop + (i.offsetHeight / 2));
+                },
+
+                _selectItem: function (target) {
+                    this._currentSelectedItem = target;
+                }
+            }
+
+            MainManager = {
+                Panel: document.getElementById("TheSekiPanel"),
+                MapManager: new MapManager(),
+                ItemManager: new ItemManager(),
+
+                GetPanelSize: function () {
+                    return {
+                        x: this.Panel.clientWidth,
+                        y: this.Panel.clientHeight
+                    }
+                },
+
+                ShowPosById: function (id) {
+                    this.ItemManager.SelectItemById(id);
+                    this.ItemManager.CenteringSelectedItem();
+                }
+            }
+            MainManager.ShowPosById("@id");
+        });
+    </script>
+
+</body>
+</html>

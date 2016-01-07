@@ -1,0 +1,175 @@
+@(develop: Boolean)
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    @if(develop) {
+    <title>裏行先（仮）[ver.γ]</title>
+    } else {
+    <title>ここにいる[ver.γ]</title>
+    }
+    <link rel="stylesheet" href="./assets/include/jquery.mobile.inline-svg-1.4.0.css" />
+    <link rel="stylesheet" href="./assets/include/coco.common.css" />
+    <link rel="stylesheet" href="./assets/include/coco.main.css" />
+    @if(!develop) {
+    <script>
+        if (navigator.userAgent.match(/(?:iPhone|iPod|Android)/)) {
+            location.href = "./mobile";
+        }
+    </script>
+    }
+</head>
+<body>
+    <div id="MainPanel">
+        <div id="TopMenu" class="noSelect">
+            <div id="SearchMain">
+                <div id="SearchInputBox">
+                    <div id="DownIcon" class="menuIcon ui-icon-carat-d">
+                        <ul id="SelectSectionList"></ul>
+                    </div>
+                </div>
+                <div id="SearchIcon" class="menuIcon ui-icon-search"></div>
+                <div id="SortIcon" class="menuIcon"></div>
+                <div id="HomeIcon" class="menuIcon ui-icon-home"></div>
+            </div>
+            <div id="ConfigMenu">
+                <div id="ConfigIcon" class="ui-icon-gear"></div>
+                <ul id="SelectConfigList">
+                    <li data-configType="myList">デフォルト表示設定</li>
+                    <li data-configType="mySection">よく使う部署の設定</li>
+                    <li data-configType="etc">オプション設定</li>
+                    @if(develop) {
+                    <li data-configType="jiji">自動更新ツール</li>
+                    <li data-configType="note">ReleaseNote</li>
+                    }
+                </ul>
+            </div>
+            <div id="LastUpdate">
+                <div id="LastUpdateTitle">LastUpdate</div>
+                <div id="LastUpdateTime"></div>
+                <div id="LastUpdateWaiting"></div>
+            </div>
+        </div>
+        <ul id="ListPanel" data-panelType="mainContents">
+            <div id="ListPanelInnerBox">
+                <div class="more ui-icon-carat-d"></div>
+            </div>
+            <iframe id="TheSekiMap"></iframe>
+        </ul>
+        <div id="UpdateStatusBox"></div>
+        <div id="ConfigMyList" class="hidden" data-panelType="mainContents">
+            <div class="summary">現在のリストをデフォルトに設定できます。<br />また、個別に社員番号を設定できます。</div>
+            <div class="inputBox"></div>
+            <div class="back"></div>
+        </div>
+        <div id="ConfigMySection" class="hidden" data-panelType="mainContents">
+            <div class="summary">よく使う部署を選択すると部署選択が簡単になります。<br />選択されなかった部署は折り畳まれます。</div>
+            <div class="buttonBox"></div>
+            <div class="back"></div>
+        </div>
+        <div id="ConfigEtc" class="hidden" data-panelType="mainContents">
+            <div class="summary">オプション設定の変更ができます。</div>
+            <div class="inputBox">
+                <textarea id="ExScript"></textarea>
+            </div>
+            <div class="back"></div>
+        </div>
+        @if(develop) {
+        <div id="ConfigJiji" class="hidden" data-panelType="mainContents">
+            <div class="summary">端末の起動時とシャットダウン時に<br />自動でステータスを変更してくれるツール。</div>
+            <div class="inputBox"></div>
+            <div class="back"></div>
+        </div>
+        <div id="ConfigNote" class="hidden" data-panelType="mainContents">
+            <div class="summary">ReleaseNote<br />最終更新日：<span id="ReleaseYMD">yyyy/MM/dd</span></div>
+            <div class="inputBox">
+                <iframe></iframe>
+            </div>
+            <div class="back"></div>
+        </div>
+        }
+    </div>
+
+    <div id="PopupJotaiMain" class="PopupPanel hidden">
+        <div class="popupContain">
+            <div class="buttonBox">
+                <a class="button popupSelect">会議</a>
+                <a class="button popupSelect">打ち合わせ</a>
+                <a class="button popupSelect">来客</a>
+                <a class="button popupSelect">研修</a>
+                <a class="button popupSelect">出張</a>
+                <a class="button popupSelect">外出</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="PopupYukisakiMain" class="PopupPanel hidden">
+        <div class="popupContain">
+            <div class="buttonBox">
+
+                <a class="button popupSelect">1F プレゼンルーム</a>
+                <a class="button popupSelect">1F 会議室１</a>
+                <a class="button popupSelect">1F 会議室２</a>
+                <a class="button popupSelect">1F 会議室３</a>
+                <a class="button popupSelect">1F 会議室４</a>
+                <a class="button popupSelect">1F 打合せコーナー</a>
+                <a class="button popupSelect">1F カフェテリア</a>
+                <a class="button popupSelect">4F 会議室１</a>
+                <a class="button popupSelect">4F 会議室２</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="PopupNichijiMain" class="PopupPanel hidden">
+        <div class="popupContain">
+            <div class="buttonBox">
+                <a class="button popupSelect">～8:00</a>
+                <a class="button popupSelect">～8:30</a>
+                <a class="button popupSelect">～9:00</a>
+                <a class="button popupSelect">～9:30</a>
+                <a class="button popupSelect">～10:00</a>
+                <a class="button popupSelect">～10:30</a>
+                <a class="button popupSelect">～11:00</a>
+                <a class="button popupSelect">～11:30</a>
+                <a class="button popupSelect">～12:00</a>
+                <a class="button popupSelect">～12:30</a>
+                <a class="button popupSelect">～13:00</a>
+                <a class="button popupSelect">～13:30</a>
+                <a class="button popupSelect">～14:00</a>
+                <a class="button popupSelect">～14:30</a>
+                <a class="button popupSelect">～15:00</a>
+                <a class="button popupSelect">～15:30</a>
+                <a class="button popupSelect">～16:00</a>
+                <a class="button popupSelect">～16:30</a>
+                <a class="button popupSelect">～17:00</a>
+                <a class="button popupSelect">～17:30</a>
+                <a class="button popupSelect">～18:00</a>
+                <a class="button popupSelect">AM</a>
+                <a class="button popupSelect">PM</a>
+                <a class="button popupSelect">NR</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/include/jquery-2.0.3.min.js"></script>
+    <script src="./assets/include/jquery.cookie.js"></script>
+    <script src="./assets/data/newphone.js"></script>
+    <script src="./assets/data/list.js"></script>
+    <script src="./assets/data/TheSekiList.js"></script>
+    <script src="./assets/include/coco.common.js"></script>
+    <script src="./assets/include/coco.main.js"></script>
+    @if(develop) {
+    <script src="./assets/include/coco.uracoco.js"></script>
+    } else {
+    <script>
+        $(function () {
+            Coco.Manager.init();
+        });
+    </script>
+    }
+</body>
+</html>
