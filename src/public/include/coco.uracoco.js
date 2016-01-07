@@ -187,34 +187,6 @@ $(function () {
             }
         },
 
-        ReleaseNote: {
-            _init: false,
-
-            _create: function () {
-                var self = this;
-                var box = $("#ConfigNote .inputBox");
-                // キャンセルボタン
-                box.append(common.createButton("OK", "ok").on("click", function () {
-                    $("#SelectSectionList li:not(.hidden)").first().trigger("click");
-                }));
-                // iframe
-                box.find("iframe").attr("src", "./note?" + Manager.ver);
-
-                this._init = true;
-            },
-
-            open: function () {
-                if (!this._init) {
-                    this._create();
-                }
-                // オープン
-                $("[data-panelType=mainContents]").exHide();
-                $("#ConfigNote").exShow();
-                // マネージャーに登録
-                Manager.startEdit();
-            }
-        },
-
         // 追加init
         exInit: function () {
             var self = this;
@@ -224,14 +196,7 @@ $(function () {
                 self.Jiji.open();
                 self._closeList(true);
                 return false;
-            })
-            .on("click", "li[data-configType=note]", function (e) {
-                self.ReleaseNote.open();
-                self._closeList(true);
-                return false;
             });
-
-            this._menuHeight = "160px";
         }
     });
 

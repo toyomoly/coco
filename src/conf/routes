@@ -27,7 +27,6 @@ GET    /mobile!                controllers.Application.index(develop:Boolean = t
 GET    /mobile                 controllers.Application.index(develop:Boolean = false, mobile:Boolean = true)
 GET    /map                    controllers.Application.map(id:String ?= "", mini:Boolean = false)
 GET    /mapmini                controllers.Application.map(id:String ?= "", mini:Boolean = true)
-GET    /note                   controllers.Application.note
 GET    /uracoco/               controllers.Application.uracoco
 
 # Map static resources from the /public folder to the /assets URL path

@@ -47,8 +47,10 @@ object YukisakiWS {
 
   implicit val timeout = Timeout(1 second)
 
+  private val ws = Akka.system.actorOf(Props[YukisakiWS])
+  
   lazy val default = {
-    val ws = Akka.system.actorOf(Props[YukisakiWS])
+//    val ws = Akka.system.actorOf(Props[YukisakiWS])
     // Create AutoRefresh
     AutoRefresh(ws)
     ws
@@ -73,6 +75,10 @@ object YukisakiWS {
         }
         (iteratee, enumerator)
     }
+  }
+
+  def updateNotify() = {
+    ws ? Reget
   }
 
   def getSectionListFuture: Future[Response] = {
