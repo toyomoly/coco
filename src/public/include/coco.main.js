@@ -28,14 +28,7 @@ $(function () {
             )
             .append($("<div></div>").addClass("block-e")
                 .append($("<div></div>").addClass("block-e-1")
-                    .append(TheSekiList[item.id.toLowerCase()] ? common.createButton("座席", "showmap").hover(
-                        function () {
-                            $("#TheSekiMap").attr("src", "./mapmini?id=" + item.id.toLowerCase()).addClass("show");
-                        },
-                        function () {
-                            $("#TheSekiMap").attr("src", "").removeClass("show");
-                        }
-                    ) : "")
+                    .append(TheSekiList[item.id.toLowerCase()] ? common.createButton("座席", "showmap") : "")
                 )
             )
             .append($("<div></div>").addClass("block-o")
@@ -48,6 +41,9 @@ $(function () {
                 .append(Manager.UpdateBackup[item.id] ? $("<div></div>").addClass("block-p-z")
                     .append(common.createButton("", "undo mini", "ui-icon-back"))
                 : "")
+                .append($("<div></div>").addClass("block-p-z")
+                    .append(Manager.UpdateBackup[item.id] ? common.createButton("", "undo mini", "ui-icon-back") : "")
+                )
                 .append($("<div></div>").addClass("block-p-2 textdata").text(item.yukisaki))
                 .append($("<div></div>").addClass("block-p-3 textdata").text(item.nichiji))
                 .append($("<div></div>").addClass("block-p-y").text(item.lastUpdate))
@@ -144,6 +140,7 @@ $(function () {
                 this._dom.removeClass().addClass("theme" + item.statusCd);
                 this._dom.find(".block-o .block-o-1 a.button").text(item.status);
                 this._dom.find(".block-p .block-p-1.textdata").text(item.jotai);
+                this._dom.find(".block-p .block-p-z").empty().append(Manager.UpdateBackup[item.id] ? common.createButton("", "undo mini", "ui-icon-back") : "");
                 this._dom.find(".block-p .block-p-2.textdata").text(item.yukisaki);
                 this._dom.find(".block-p .block-p-3.textdata").text(item.nichiji);
                 this._dom.find(".block-p .block-p-y").text(item.lastUpdate);
@@ -233,7 +230,7 @@ $(function () {
             })
             .on("click", "li .block-e .block-e-1 a.button.showmap", function () {
                 var tempId = $(this).closest("li").attr("data-id").toLowerCase();
-                window.open("./map?id=" + tempId, "showpos");
+                $("#TheSekiMap").addClass("show").attr("src", "./map?id=" + tempId);
             })
             .on("click", "li .block-p .block-p-z a.button.undo", function () {
                 var tempId = $(this).closest("li").attr("data-id");
@@ -783,6 +780,10 @@ $(function () {
             _addDirectPasteScr: "",
             _delDirectPasteScr: "EX.c(false);",
 
+            _addShowmap: false,
+            _addShowmapScr: "EX.d(true);",
+            _delShowmapScr: "",
+
             _editMyScr: function () {
                 var myScr = "";
                 if (this._addConfirm) {
@@ -805,6 +806,16 @@ $(function () {
                     $("#ConfigEtc .inputBox a.button.config.paste.no").addClass("on");
                     myScr += this._delDirectPasteScr;
                 }
+                if (this._addShowmap) {
+                    $("#ConfigEtc .inputBox a.button.config.showmap.yes").addClass("on");
+                    $("#ConfigEtc .inputBox a.button.config.showmap.no").removeClass("on");
+                    myScr += this._addShowmapScr;
+                } else {
+                    // デフォルト
+                    $("#ConfigEtc .inputBox a.button.config.showmap.yes").removeClass("on");
+                    $("#ConfigEtc .inputBox a.button.config.showmap.no").addClass("on");
+                    myScr += this._delShowmapScr;
+                }
                 $("#ConfigEtc .inputBox textarea").val(myScr);
             },
 
@@ -820,6 +831,7 @@ $(function () {
                         $.cookie("myScr", ta.val(), { expires: 365 });
                         location.reload();
                     }))
+
                     .append($("<div></div>").addClass("title").text("更新時の確認メッセージの表示"))
                     .append(common.createButton("表示する", "select config confirm yes", "ui-icon-radio").on("click", function () {
                         self._addConfirm = true;
@@ -829,6 +841,7 @@ $(function () {
                         self._addConfirm = false;
                         self._editMyScr();
                     }))
+
                     .append($("<div></div>").addClass("title").text("Pasteの動作"))
                     .append(common.createButton("Paste+更新", "select config paste yes", "ui-icon-radio").on("click", function () {
                         self._addDirectPaste = true;
@@ -836,6 +849,16 @@ $(function () {
                     }))
                     .append(common.createButton("Paste+編集", "select config paste no", "ui-icon-radio").on("click", function () {
                         self._addDirectPaste = false;
+                        self._editMyScr();
+                    }))
+
+                    .append($("<div></div>").addClass("title").text("マウスオーバーで座席の表示"))
+                    .append(common.createButton("表示する", "select config showmap yes", "ui-icon-radio").on("click", function () {
+                        self._addShowmap = true;
+                        self._editMyScr();
+                    }))
+                    .append(common.createButton("表示しない", "select config showmap no", "ui-icon-radio").on("click", function () {
+                        self._addShowmap = false;
                         self._editMyScr();
                     }))
                     .append($(ta));
@@ -850,6 +873,7 @@ $(function () {
                 var myScr = $.cookie("myScr") || "";
                 this._addConfirm = (myScr.indexOf(this._addConfirmScr) > -1);
                 this._addDirectPaste = (myScr.indexOf(this._addDirectPasteScr) > -1);
+                this._addShowmap = (myScr.indexOf(this._addShowmapScr) > -1);
                 this._editMyScr();
                 $("#ConfigEtc .inputBox textarea").val(myScr);
 
@@ -962,7 +986,8 @@ $(function () {
             mySection: [],
             exConfirm: false,
             exDirectPaste: true,
-            exReselect: []
+            exReselect: [],
+            exShowmap: false
         },
 
         _editVal: {
@@ -1130,7 +1155,8 @@ $(function () {
     var EX = {
         a: function () {},
         b: function (b) { Manager.option.exConfirm = b; },
-        c: function (b) { Manager.option.exDirectPaste = b; }
+        c: function (b) { Manager.option.exDirectPaste = b; },
+        d: function (b) { Manager.option.exShowmap = b; }
     }
 
     Coco.Config = Config;
