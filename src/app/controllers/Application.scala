@@ -5,7 +5,7 @@ import play.api.mvc._
 
 object Application extends Controller {
 
-  def index(develop: Boolean, mobile: Boolean) = Action {
+  def index(develop: Boolean, mobile: Boolean) = Action { implicit request =>
     if (mobile) {
       Ok(views.html.mobile(develop))
     } else {

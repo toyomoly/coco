@@ -237,9 +237,9 @@ $(function () {
     });
 
     // バージョン
-    Manager.ver = 20140206;
+    Manager.ver = 20140210;
     var afterReload = function () {}
-    $("#ReleaseYMD").text("2014/02/06");
+    $("#ReleaseYMD").text("2014/02/10");
 //    if ($.cookie("version") != Manager.ver) {
 //        afterReload = function () {
 //            Coco.Config.ReleaseNote.open();

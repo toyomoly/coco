@@ -11,6 +11,8 @@ import play.api.libs.concurrent.Execution.Implicits._
 // import play.api.data.Form
 // import play.api.data.Forms._
 // import play.api.libs.functional.syntax._
+import models._
+import play.api.libs.iteratee._
 
 object Yukisaki extends Controller {
 
@@ -84,6 +86,44 @@ object Yukisaki extends Controller {
     val Yukisaki = request.body.\("Yukisaki").asOpt[String].getOrElse("")
     val Nichiji = request.body.\("Nichiji").asOpt[String].getOrElse("")
     _updateYukisaki(UserID, StatusCD, Jotai, Yukisaki, Nichiji, "")
+  }
+
+//  // test
+//  //  def chat(username: String) = WebSocket.async[JsValue] { request =>
+//  //  }
+//  def test1 = WebSocket.using[String] { request =>
+//    // Log events to the console
+//    val in = Iteratee.foreach[String](println).mapDone { _ =>
+//      println("Disconnected")
+//    }
+//    // Send a single 'Hello!' message
+//    val out = Enumerator("Hello!")
+//    (in, out)
+//  }
+//
+//  def test2 = WebSocket.using[String] { request =>
+//    // Just consume and ignore the input
+//    val in = Iteratee.consume[String]()
+//    // Send a single 'Hello!' message and close
+//    val out = Enumerator("Hello!") >>> Enumerator.eof
+//    (in, out)
+//  }
+//
+//  def test3 = WebSocket.using[String] { request =>
+//    //Concurernt.broadcast returns (Enumerator, Concurrent.Channel)
+//    val (out, channel) = Concurrent.broadcast[String]
+//    //log the message to stdout and send response back to client
+//    val in = Iteratee.foreach[String] {
+//      msg =>
+//        println(msg)
+//        //the channel will push to the Enumerator
+//        channel.push("RESPONSE: " + msg)
+//    }
+//    (in, out)
+//  }
+
+  def socket = WebSocket.async[JsValue] { request =>
+    YukisakiWS.join
   }
 
 }
