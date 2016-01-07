@@ -110,7 +110,7 @@
             MapManager.prototype = {
 
                 _SCROLL_INTERVAL_TIME: 25,
-                _ZOOM_RATE_BASE: 1.5,
+                _ZOOM_RATE_BASE: 4 / 3,
                 _MAP_BASE_IMG_WIDTH: 2400,
                 _MAP_BASE_IMG_DEFAULT_RATE: 0.75,
 
@@ -200,11 +200,13 @@
                 },
 
                 _mouseWheel: function (e) {
-
+                    var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;   // IE:wheelDelta, FF:detail
+                    this._rezoom(delta);
+                },
+                _rezoom: function (delta) {
                     var beforeRate = this.GetZoomRate();
 
                     //縮尺を変更する
-                    var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;   // IE:wheelDelta, FF:detail
                     if (delta > 0) {
                         this._nowZoom++;
                     } else {
@@ -243,6 +245,12 @@
                 },
                 GetZoomRate: function () {
                     return Math.pow(this._ZOOM_RATE_BASE, this._nowZoom);
+                },
+                ZoomIn: function () {
+                    this._rezoom(1);
+                },
+                ZoomOut: function () {
+                    this._rezoom(-1);
                 }
             }
 
@@ -331,6 +339,7 @@
                 }
             }
             MainManager.ShowPosById("@id");
+            MainManager.MapManager.ZoomIn();    // mapminiと初期zoomを合わせた
         });
     </script>
 
