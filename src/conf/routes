@@ -6,28 +6,19 @@
 GET    /json/getSectionList    controllers.Yukisaki.getSectionList(callback = "")
 GET    /json/getYukisakiList   controllers.Yukisaki.getYukisakiList(callback = "")
 GET    /json/updateYukisaki    controllers.Yukisaki.updateYukisaki(UserID:String, StatusCD:String, Jotai:String, Yukisaki:String, Nichiji:String, callback = "")
-GET    /json/getJiji           controllers.Jiji.getJiji(UserID:String, callback = "")
-GET    /json/setJiji           controllers.Jiji.setJiji(UserID:String, IpAddress:String, Action1:String, Action2:String, callback = "")
-GET    /json/checkPing         controllers.Jiji.checkPing(IpAddress:String, callback = "")
 
 POST   /post/getSectionList    controllers.Yukisaki.getSectionListByPost()
 POST   /post/getYukisakiList   controllers.Yukisaki.getYukisakiListByPost()
 POST   /post/updateYukisaki    controllers.Yukisaki.updateYukisakiByPost()
-POST   /post/getJiji           controllers.Jiji.getJijiByPost()
-POST   /post/setJiji           controllers.Jiji.setJijiByPost()
-POST   /post/checkPing         controllers.Jiji.checkPingByPost()
 
 # WebSocket
 GET    /ws/                    controllers.Yukisaki.socket
 
 # Home age
-GET    /!                      controllers.Application.index(develop:Boolean = true, mobile:Boolean = false)
 GET    /                       controllers.Application.index(develop:Boolean = false, mobile:Boolean = false)
-GET    /mobile!                controllers.Application.index(develop:Boolean = true, mobile:Boolean = true)
 GET    /mobile                 controllers.Application.index(develop:Boolean = false, mobile:Boolean = true)
 GET    /map                    controllers.Application.map(id:String ?= "", mini:Boolean = false)
 GET    /mapmini                controllers.Application.map(id:String ?= "", mini:Boolean = true)
-GET    /uracoco/               controllers.Application.uracoco
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file           controllers.Assets.at(path="/public", file)
