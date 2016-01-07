@@ -53,25 +53,25 @@ window.Coco.Common = $.extend(navigator.userAgent.match(/(?:iPhone|iPod|Android)
             var id = s[0].toLowerCase();
             // map と each で受け取る引数違う
             var s2 = ["", "", "", "", "", "", "", "", ""];
+            var sortIdx = list2.length;
             $.each(list2, function (j, t) {
                 if (id == (t[7] + "nnnnn").substr(0, 5).toLowerCase()) {
                     s2 = t;
+                    sortIdx = j;
                     return false;
                 }
             });
             var a = s.concat(s2);
 
-            // 新電話番号対応
-            if (NEW_PHONE_LIST[id]) {
-                a[11] = "<div class='small'>(電話番号表)</div>&nbsp;" + self._repraceTel(NEW_PHONE_LIST[id].p);
-            } else {
-                a[11] = "<div class='small'>(Dolphin)</div>&nbsp;" + self._repraceTel(s2[3]);
-            }
+            // 内線表示
+            a[11] = (s2[3] == "") ? "" : "<div class='small'>(内線)</div>&nbsp;" + self._repraceTel(s2[3]);
 
-            return self._getProperty(a);
+            return self._getProperty(a, sortIdx);
+        }).sort(function (a, b) {
+            return a.sortIndex - b.sortIndex;
         });
     },
-    _getProperty: function (itemArray) {
+    _getProperty: function (itemArray, sortIdx) {
         var statusCd = itemArray[3];
         return {
             // yukisaki
@@ -88,13 +88,23 @@ window.Coco.Common = $.extend(navigator.userAgent.match(/(?:iPhone|iPod|Android)
             comment: this._getComment(itemArray[4], itemArray[5], itemArray[6]),
             lastUpdate: itemArray[7],
             // dolphin
-            imgTag: itemArray[8] || "<div class='no-image ui-icon-user'></div>",
+            getImgElement: function () {
+                var img = $(itemArray[8] || ("<img src='http://dolphin2.ndensan.co.jp/OTHER/img/" + itemArray[0].substr(1, 4) + ".jpg' />"));
+                // 画像読み込みエラー時にダミー表示
+                img.error(function () {
+                    $(this).before("<div class='no-image ui-icon-user'></div>").remove();
+                });
+                return img;
+            },
             name: itemArray[9] || itemArray[1],
             kana: itemArray[10],
             phone: itemArray[11],
-            // section: itemArray[12],
+            vSection: itemArray[12],
             sectionCd: itemArray[13],
-            rank: itemArray[14]
+            rank: itemArray[14],
+            // mail: itemArray[15],
+            romaji: itemArray[16],
+            sortIndex: sortIdx
         }
     },
     _getComment: function (jotai, yukisaki, nichiji) {

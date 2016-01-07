@@ -7,17 +7,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    @if(develop) {
-    <title>裏行先（仮）[ver.γ]</title>
-    } else {
-    <title>ここにいる[ver.γ]</title>
-    }
+    <title>行先ボード</title>
     <link rel="stylesheet" href="./assets/include/jquery.mobile.inline-svg-1.4.0.css" />
     <link rel="stylesheet" href="./assets/include/coco.common.css" />
     <link rel="stylesheet" href="./assets/include/coco.main.css" />
+    <!--[if lt IE 9]>
+        <script>
+            location.href = "./old/";
+        </script>
+    <![endif]-->
     @if(!develop) {
     <script>
-        if (navigator.userAgent.match(/(?:iPhone|iPod|Android)/)) {
+        if (navigator.userAgent.match(/(?:iPhone|iPad|iPod|Android)/)) {
             location.href = "./mobile";
         }
     </script>
@@ -29,23 +30,26 @@
             <div id="SearchMain">
                 <div id="SearchInputBox">
                     <div id="DownIcon" class="menuIcon ui-icon-carat-d">
-                        <ul id="SelectSectionList"></ul>
+                        <div id="SelectSectionListBox">
+                            <ul id="SelectSectionList"></ul>
+                        </div>
                     </div>
                 </div>
                 <div id="SearchIcon" class="menuIcon ui-icon-search"></div>
                 <div id="SortIcon" class="menuIcon"></div>
+                <div id="SimpleIcon" class="menuIcon ui-icon-bars"></div>
                 <div id="HomeIcon" class="menuIcon ui-icon-home"></div>
             </div>
             <div id="ConfigMenu">
                 <div id="ConfigIcon" class="ui-icon-gear"></div>
-                <ul id="SelectConfigList">
-                    <li data-configType="myList">デフォルト表示設定</li>
-                    <li data-configType="mySection">よく使う部署の設定</li>
-                    <li data-configType="etc">オプション設定</li>
-                    @if(develop) {
-                    <li data-configType="jiji">自動更新ツール</li>
-                    }
-                </ul>
+                <div id="SelectConfigListBox">
+                    <ul id="SelectConfigList">
+                        <li data-configType="myList">デフォルト表示設定</li>
+                        <li data-configType="mySection">よく使う部署の設定</li>
+                        <li data-configType="etc">オプション設定</li>
+                        <li data-configType="old"><a href="./old/">旧バージョンはこちら</a></li>
+                    </ul>
+                </div>
             </div>
             <div id="LastUpdate">
                 <div id="LastUpdateTitle">LastUpdate</div>
@@ -57,7 +61,10 @@
             <div id="ListPanelInnerBox">
                 <div class="more ui-icon-carat-d"></div>
             </div>
-            <iframe id="TheSekiMap"></iframe>
+            <div id="TheSekiMapBox">
+                <div class="closeMap ui-icon-carat-d"></div>
+                <iframe id="TheSekiMap"></iframe>
+            </div>
         </ul>
         <div id="UpdateStatusBox"></div>
         <div id="ConfigMyList" class="hidden" data-panelType="mainContents">
@@ -77,13 +84,6 @@
             </div>
             <div class="back"></div>
         </div>
-        @if(develop) {
-        <div id="ConfigJiji" class="hidden" data-panelType="mainContents">
-            <div class="summary">端末の起動時とシャットダウン時に<br />自動でステータスを変更してくれるツール。</div>
-            <div class="inputBox"></div>
-            <div class="back"></div>
-        </div>
-        }
     </div>
 
     <div id="PopupJotaiMain" class="PopupPanel hidden">
@@ -142,10 +142,13 @@
                 <a class="button popupSelect">～18:00</a>
                 <a class="button popupSelect">AM</a>
                 <a class="button popupSelect">PM</a>
-                <a class="button popupSelect">NR</a>
+                <a class="button popupSelect">直帰</a>
             </div>
         </div>
     </div>
+
+    <!-- iframe内のキャッシュ更新用 -->
+    <img src="./assets/data/MapBaseImg.png" style="display:none;" />
 
     <script src="./assets/include/jquery-2.0.3.min.js"></script>
     <script src="./assets/include/jquery.cookie.js"></script>
@@ -154,13 +157,10 @@
     <script src="./assets/include/coco.common.js"></script>
     <script src="./assets/include/coco.text.js"></script>
     <script src="./assets/include/coco.main.js"></script>
-    @if(develop) {
-    <script src="./assets/include/coco.uracoco.js"></script>
-    }
     <script>
         $(function () {
             Coco.Manager.init(function () {
-                Coco.Manager.setAutoReload("@routes.Yukisaki.socket.webSocketURL()");
+                Coco.Manager.setAutoReload("@play.Configuration.root.getString("websocketPath")");
             });
         });
     </script>

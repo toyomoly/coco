@@ -15,12 +15,12 @@ $(function () {
 
             this._dom = $("<li></li>").addClass("theme" + item.statusCd).attr("data-id", item.id)
             .append($("<div></div>").addClass("block-a")
-                .append($("<div></div>").addClass("block-a-1").append(item.imgTag))
+                .append($("<div></div>").addClass("block-a-1").append(item.getImgElement()))
             )
             .append($("<div></div>").addClass("block-b")
                 .append($("<div></div>").addClass("block-b-1")
                     .append($("<div></div>").addClass("textdata textdata-id").text(item.id))
-                    .append($("<div></div>").addClass("textdata textdata-group").text(item.section))
+                    .append($("<div></div>").addClass("textdata textdata-group").text(item.vSection))
                 )
                 .append($("<div></div>").addClass("block-b-2 textdata large").text(item.name))
                 .append($("<div></div>").addClass("block-b-3")
@@ -68,11 +68,11 @@ $(function () {
             var item = this._item;
 
             var liBase = $("#DetailBaseLi").attr("data-id", item.id);
-            liBase.find(".block-a .block-a-1").empty().append(item.imgTag);
+            liBase.find(".block-a .block-a-1").empty().append(item.getImgElement());
             liBase.find(".textdata.data-id").text(item.id);
             liBase.find(".textdata.data-name").text(item.name);
             liBase.find(".textdata.data-kana").text(item.kana);
-            liBase.find(".textdata.data-section").text(item.section);
+            liBase.find(".textdata.data-section").text(item.vSection);
             // liBase.find(".textdata.data-sectionCd").text(item.sectionCd);
             liBase.find(".textdata.data-rank").text(item.rank);
             liBase.find(".textdata.data-phone").empty().append(item.phone);
@@ -445,11 +445,12 @@ $(function () {
                     if (!(
                         (item.id.toLowerCase().indexOf(v[j]) > -1) ||
                         (item.name.indexOf(v[j]) > -1) ||
-                        (item.section.indexOf(v[j]) > -1) ||
                         (item.kana.indexOf(v[j]) > -1) ||
                         (item.phone.toLowerCase().substr(item.phone.indexOf("&nbsp;") + 6).indexOf(v[j]) > -1) ||
+                        (item.vSection.toLowerCase().indexOf(v[j]) > -1) ||
                         (item.sectionCd.toLowerCase() == v[j]) ||
-                        (item.rank.indexOf(v[j]) > -1)
+                        (item.rank.indexOf(v[j]) > -1) ||
+                        (item.romaji.toLowerCase().indexOf(v[j]) > -1)
                     )) {
                         return false;
                     }
