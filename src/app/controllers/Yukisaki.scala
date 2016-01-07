@@ -56,6 +56,7 @@ object Yukisaki extends Controller {
     Logger.debug("[updateYukisaki] start")
     YukisakiWS.updateYukisakiFuture(UserID, StatusCD, Jotai, Yukisaki, Nichiji).map { response =>
       Logger.debug("[updateYukisaki] ok")
+      YukisakiWS.updateNotify()
       val js = Json.parse(response.body)
       if (callback == "") Ok(js) else Ok(Jsonp(callback, js))
     } recover {

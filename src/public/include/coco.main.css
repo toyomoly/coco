@@ -347,7 +347,7 @@ body {
 }
 
 #MainPanel #TopMenu #ConfigMenu #SelectConfigList.extend.open {
-    height: 160px;
+    height: 128px;
 }
 
 #MainPanel #TopMenu #ConfigMenu #SelectConfigList li {
@@ -495,16 +495,21 @@ body {
     padding: 3px 0px 3px 10px;
     margin-top: 3px;
     line-height: 1;
+    height: 14px;
+    font-size: 14px;
 }
 #MainPanel #ListPanel li .textdata.small {
+    height: 10px;
     font-size: 10px;
     padding: 5px 0px 5px 10px;
 }
 #MainPanel #ListPanel li .textdata.large {
+    height: 16px;
     font-size: 16px;
     padding: 2px 0px 2px 10px;
 }
 #MainPanel #ListPanel li .textdata .small {
+    height: 10px;
     font-size: 10px;
     float: left;
     margin-top: 2px;

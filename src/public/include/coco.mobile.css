@@ -36,6 +36,7 @@ body {
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 #MainPanel #TopMenu {
@@ -404,6 +405,7 @@ body {
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 #DetailPanel {

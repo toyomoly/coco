@@ -21,10 +21,6 @@ object Application extends Controller {
     }
   }
 
-  def note = Action {
-    Ok(views.html.note())
-  }
-
   def uracoco = Action {
     Redirect("/!")
   }
