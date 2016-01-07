@@ -1,0 +1,99 @@
+@(id: String)
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.5" />
+    <title>The席</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        #TheSekiPanel {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            position: relative;
+        }
+        #TheSekiPanel.noscroll {
+            overflow: hidden;
+        }
+        
+        #MapBase {
+            background-image: url("./assets/data/MapBaseImg.png");
+            width: 2400px;
+            height: 1700px;
+            overflow: hidden;
+            border: solid 300px #ccc;
+            position: absolute;
+        }
+        
+        #MapBase .box-item {
+            overflow: hidden;
+            background: transparent;
+            background: rgba(255, 0, 0, .15);
+            border: solid 2px red;
+            float: left;
+            margin: -2px;
+            position: absolute;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="TheSekiPanel" class="noscroll">
+        <div id="MapBase"></div>
+    </div>
+
+    <script src="./assets/include/jquery-2.0.3.min.js"></script>
+    <script src="./assets/data/TheSekiList.js"></script>
+    <script>
+        $(function () {
+            try {
+                var item = TheSekiList["@id"];
+                if (!item) {
+                    alert("座席が見つかりませんでした");
+                    return;
+                }
+
+                // 位置表示
+                var rate = 4 / 3;
+                var margin = 300;
+                var w = $(window);
+                var base = $("#MapBase");
+                // 座席の強調表示
+                base.append($("<div></div>").addClass("box-item").css({
+                    "width": item.w * rate + "px",
+                    "height": item.h * rate + "px",
+                    "left": item.l * rate + "px",
+                    "top": item.t * rate + "px"
+                }));
+                // 初期位置はmarginを調整して表示
+                base.css({
+                    "margin-left": -((item.l + item.w / 2) * rate + margin - w.width() / 2) + "px",
+                    "margin-top": -((item.t + item.h / 2) * rate + margin - w.height() / 2) + "px"
+                });
+                // mousedown,touchstartで、スクロール可能にする(safariで動作不具合)
+                $(document).on("mousedown touchstart", "#TheSekiPanel.noscroll", function () {
+                    $("#MapBase").css({
+                        "margin-left": "0px",
+                        "margin-top": "0px"
+                    });
+                    $("#TheSekiPanel").removeClass("noscroll")
+                        .scrollLeft((item.l + item.w / 2) * rate + margin - w.width() / 2)
+                        .scrollTop((item.t + item.h / 2) * rate + margin - w.height() / 2);
+                });
+            } catch (ex) {
+                $("body").prepend(ex.message);
+            }
+        });
+    </script>
+</body>
+</html>
