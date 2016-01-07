@@ -72,12 +72,16 @@ window.Coco.Common = $.extend(navigator.userAgent.match(/(?:iPhone|iPod|Android)
         });
     },
     _getProperty: function (itemArray) {
+        var statusCd = itemArray[3];
         return {
             // yukisaki
             id: itemArray[0],
             // name: itemArray[1],
             section: itemArray[2],
-            statusCd: itemArray[3],
+            statusCd: statusCd,
+            status: statusCd == "1" ? Coco.Text.StatusList[0] :
+                    statusCd == "2" ? Coco.Text.StatusList[1] :
+                    statusCd == "3" ? Coco.Text.StatusList[2] : Coco.Text.StatusList[3],
             jotai: itemArray[4],
             yukisaki: itemArray[5],
             nichiji: itemArray[6],
