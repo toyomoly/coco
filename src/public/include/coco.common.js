@@ -50,21 +50,15 @@ window.Coco.Common = $.extend(navigator.userAgent.match(/(?:iPhone|iPod|Android)
     concatList2: function (list1, list2) {
         var self = this;
         return list1.map(function (s, i) {
-            var id = s[0].toLowerCase();
+            var id = (s[7] + "nnnnn").substr(0, 5).toLowerCase();
             // map と each で受け取る引数違う
             var s2 = ["", "", "", "", "", "", "", "", ""];
             var sortIdx = list2.length;
-            $.each(list2, function (j, t) {
-                if (id == (t[7] + "nnnnn").substr(0, 5).toLowerCase()) {
-                    s2 = t;
-                    sortIdx = j;
-                    return false;
-                }
-            });
             var a = s.concat(s2);
 
             // 内線表示
             a[11] = (s2[3] == "") ? "" : "<div class='small'>(内線)</div>&nbsp;" + self._repraceTel(s2[3]);
+            a[0] = id;
 
             return self._getProperty(a, sortIdx);
         }).sort(function (a, b) {

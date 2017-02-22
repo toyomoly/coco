@@ -1013,45 +1013,40 @@ $(function () {
             this._stopReload = false;
         },
         setAutoReload: function (wsURI) {
-            if (!WebSocket) { return; }
-            var self = this;
-            var ws = new WebSocket(wsURI);
-            ws.onmessage = function(event) {
-                if (event && event.data) {
-                    self.reloadByWebSocket(JSON.parse(event.data));
-                } else {
-                    console.log("WebSocket: reget no data");
-                }
-            }
+//            if (!WebSocket) { return; }
+//            var self = this;
+//            var ws = new WebSocket(wsURI);
+//            ws.onmessage = function(event) {
+//                if (event && event.data) {
+//                    self.reloadByWebSocket(JSON.parse(event.data));
+//                } else {
+//                    console.log("WebSocket: reget no data");
+//                }
+//            }
         },
         reloadByWebSocket: function (t) {
-            this.List = common.concatList2(t.d, this.List2);
-            UpdateTime.refreshTime();
-            if (!this._stopReload) {
-                ListItem.update();
-            }
+//            this.List = common.concatList2(t.d, this.List2);
+//            UpdateTime.refreshTime();
+//            if (!this._stopReload) {
+//                ListItem.update();
+//            }
         },
         reload: function (afterFunc) {
             UpdateTime.waiting();
             this._stopReload = true;
             var self = this;
 
-            Coco.Ajax.getYukisakiList(function (t) {
-                self.List = common.concatList2(t.d, self.List2);
+            self.List = common.concatList2(list, self.List2);
                 ListItem.update();
                 UpdateTime.refreshTime();
                 self._stopReload = false;
                 if (afterFunc){ afterFunc(); }
-            });
         },
         getSection: function (f) {
             this._stopReload = true;
             var self = this;
 
-            Coco.Ajax.getSectionList(function (t) {
-                self.SectionList = t.d;
-                f();
-            });
+            f();
         },
         _update: function (item) {
             this._stopReload = true;

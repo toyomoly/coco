@@ -442,6 +442,7 @@ body {
     padding: 3px;
     height: 72px;
     transition: .3s;
+    border-bottom: 1px solid #ccc;
 }
     @media screen and (max-width:800px) {
         #MainPanel #ListPanel li { width: 800px; } }
